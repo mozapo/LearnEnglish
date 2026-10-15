@@ -7,6 +7,6 @@ Everywhere**, activate. Staging first, live only after approval.
 
 | File | What it does |
 |---|---|
-| `bai-interview-reminder-once.php` | Stopgap (15 Oct 2026). The bai-booking plugin re-sent the interview reminder on every hourly run in the last 24 hours (6× each to candidate and owner). This lets each interview reminder through once per recipient per interview time and blocks repeats. Remove when the plugin sends a single 1-hour-before reminder. |
+| `bai-interview-reminder-once.php` | Stopgap (15 Oct 2026). bai-booking 0.8.0 re-sent the interview reminder every hourly run in the last 24 hours and titled the owner copy "Yarın görüşme" even on the day. This holds reminders until the interview is ≤75 min away (date read from the subject, Turkey time), lets each through once per recipient per interview time, and renames "Yarın görüşme:" to "Görüşme hatırlatması:". Remove when the plugin sends a single 1-hour-before reminder. |
 
 Offline test (no WordPress needed): `php wpcode/test/interview-reminder-once.php`
