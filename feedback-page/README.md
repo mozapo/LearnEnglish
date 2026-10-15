@@ -13,7 +13,8 @@ but the contact page had no way to do that.
 - Anonymous reports are allowed but optional.
 - Turkish only (no English pages).
 
-**Status:** on **staging** since 15 Oct 2026 (form 5772, page 5773). **Not on live yet**: that needs the owner's approval.
+**Status:** staging since 15 Oct 2026 (form 5772, page 5773). **Live since 15 Oct 2026** (form 5765, page 5766,
+https://biradimileri.com/geri-bildirim/), approved by the owner. Browser checks passed on live. Live backups are in `backup/live-*`.
 
 ## What changes
 
