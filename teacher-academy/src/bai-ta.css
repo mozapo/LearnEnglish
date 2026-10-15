@@ -1,0 +1,162 @@
+/* Teacher Academy – Preview: styles for the new sections only.
+   Scoped under .bai-ta; tokens mirror the existing .bai-ac hub (navy + gold, Fraunces / Inter). */
+.bai-ta{--g:#B98A2E;--gl:#E7C77E;--og:#1A1206;--navy:#16233F;--ink:#E8EDF7;--mut:#A6B6D0;--line:rgba(232,237,247,.14);--wash:rgba(255,255,255,.045);--wash2:rgba(255,255,255,.07);--e:cubic-bezier(.22,.61,.36,1);color:var(--ink)}
+.bai-ta *{box-sizing:border-box}
+.bai-ta [hidden]{display:none!important}
+.bai-ac.no-js .bai-ta-jsonly{display:none!important}
+.bai-ta-sec{margin:0 0 46px}
+.bai-ta h2{font-size:clamp(1.45rem,3vw,1.95rem);line-height:1.2;margin:0 0 12px}
+.bai-ta h3{font-size:1.08rem;line-height:1.3;margin:0 0 4px}
+.bai-ta p{line-height:1.65;margin:0 0 14px}
+.bai-ta a{color:var(--gl)}
+.bai-ta :focus-visible{outline:2px solid var(--gl);outline-offset:3px;border-radius:6px}
+.bai-ta [tabindex="-1"]:focus{outline:none}
+.bai-ta .bai-ta-journey__list a,.bai-ta a.bai-ta-rcard,.bai-ta a.bai-ta-btn{text-decoration:none!important}
+.bai-ta-eyebrow{font-size:.76rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gl);margin:0 0 10px!important}
+.bai-ta-note{font-size:.86rem;color:var(--mut)}
+.bai-ta-card{background:var(--wash);border:1px solid var(--line);border-radius:18px;padding:clamp(18px,3.4vw,28px);margin:0}
+.bai-ta-btns{display:flex;flex-wrap:wrap;gap:12px;margin:18px 0 14px}
+.bai-ta-btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:13px 24px;border-radius:13px;border:0;background:var(--g);color:var(--og)!important;font:inherit;font-weight:700;text-decoration:none;cursor:pointer;transition:transform .2s var(--e),box-shadow .2s var(--e),filter .2s var(--e)}
+.bai-ta-btn:hover{transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 10px 26px rgba(185,138,46,.26)}
+.bai-ta-btn--ghost{background:transparent;color:var(--ink)!important;border:1px solid var(--line)}
+.bai-ta-btn--ghost:hover{background:var(--wash2);box-shadow:none;filter:none}
+.bai-ta-link{background:none;border:0;padding:6px 0;color:var(--gl);font:inherit;font-size:.9rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+
+/* Scroll reveal: content stays visible unless JS opts in (.bai-ta-anim on <html>). */
+.bai-ta-anim .bai-ta-rv{opacity:0;transform:translateY(18px);transition:opacity .6s var(--e),transform .6s var(--e)}
+.bai-ta-anim .bai-ta-rv.is-in{opacity:1;transform:none}
+
+/* Journey bar */
+.bai-ta-journey{position:sticky;top:var(--wp-admin--admin-bar--height,0px);z-index:30;margin:0 calc(-1*clamp(8px,2vw,14px)) 34px;padding:10px clamp(8px,2vw,14px) 0;background:rgba(22,35,63,.92);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bai-ta-journey__list{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:0;padding:0;list-style:none}
+.bai-ta-journey__list a{display:flex;align-items:center;gap:8px;padding:6px 4px 10px;color:var(--mut);text-decoration:none;font-size:.82rem;font-weight:600;transition:color .25s var(--e)}
+.bai-ta-journey__list a:hover{color:var(--ink)}
+.bai-ta-journey__dot{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);transition:background .35s var(--e),border-color .35s var(--e),transform .35s var(--e)}
+.bai-ta-journey__dot svg{width:14px;height:14px;fill:none;stroke:var(--og);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .25s var(--e)}
+.bai-ta-journey__list a.is-done{color:var(--ink)}
+.bai-ta-journey__list a.is-done .bai-ta-journey__dot{background:var(--g);border-color:var(--g)}
+.bai-ta-journey__list a.is-done .bai-ta-journey__dot svg{opacity:1}
+.bai-ta-journey__list a[aria-current="step"]{color:#fff}
+.bai-ta-journey__list a[aria-current="step"] .bai-ta-journey__dot{transform:scale(1.12);box-shadow:0 0 0 4px rgba(231,199,126,.18)}
+.bai-ta-journey__bar{height:3px;background:var(--line);border-radius:3px;overflow:hidden}
+.bai-ta-journey__bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,var(--g),var(--gl));transform:scaleX(0);transform-origin:0 50%;transition:transform .3s linear}
+@media (max-width:560px){
+  .bai-ta-journey__list a{flex-direction:column;gap:4px;text-align:center;font-size:.7rem}
+}
+
+/* Framework stairs */
+.bai-ta-stairs{display:grid;grid-template-columns:repeat(4,1fr);align-items:end;gap:clamp(6px,2vw,14px);height:190px;margin:22px 0 10px;padding:0;list-style:none}
+.bai-ta-stairs li{position:relative;display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.bai-ta-stairs__bar{display:block;height:var(--h);border-radius:12px 12px 4px 4px;background:var(--wash2);border:1px solid var(--line);transform-origin:50% 100%;transition:transform .9s var(--e)}
+.bai-ta-stairs li.is-here .bai-ta-stairs__bar{background:linear-gradient(180deg,var(--gl),var(--g));border-color:transparent}
+.bai-ta-stairs__name{display:block;margin-top:8px;font-size:clamp(.72rem,2.4vw,.9rem);font-weight:600;color:var(--mut);text-align:center}
+.bai-ta-stairs li.is-here .bai-ta-stairs__name{color:#fff}
+.bai-ta-stairs__tag{position:absolute;left:50%;bottom:calc(var(--h) + 34px);transform:translateX(-50%);white-space:nowrap;font-size:.7rem;font-weight:700;color:var(--og);background:var(--gl);border-radius:99px;padding:3px 9px}
+.bai-ta-anim .bai-ta-rv .bai-ta-stairs__bar{transform:scaleY(0)}
+.bai-ta-anim .bai-ta-rv.is-in .bai-ta-stairs__bar{transform:none}
+.bai-ta-anim .bai-ta-rv.is-in li:nth-child(2) .bai-ta-stairs__bar{transition-delay:.1s}
+.bai-ta-anim .bai-ta-rv.is-in li:nth-child(3) .bai-ta-stairs__bar{transition-delay:.2s}
+.bai-ta-anim .bai-ta-rv.is-in li:nth-child(4) .bai-ta-stairs__bar{transition-delay:.3s}
+
+/* Quiz */
+.bai-ta-qhead{display:flex;align-items:center;gap:12px;margin:0 0 14px;font-size:.82rem;color:var(--mut)}
+.bai-ta-qbar{flex:1;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.bai-ta-qbar i{display:block;height:100%;width:100%;background:var(--g);transform-origin:0 50%;transform:scaleX(.2);transition:transform .4s var(--e)}
+.bai-ta-quiz h3{font-size:1.15rem;margin:0 0 14px;outline:none}
+.bai-ta-qopts{display:grid;gap:10px;margin:0 0 6px}
+.bai-ta-opt{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:13px;border:1px solid var(--line);background:var(--wash);color:var(--ink);font:inherit;line-height:1.45;cursor:pointer;transition:transform .2s var(--e),border-color .2s var(--e),background .2s var(--e)}
+.bai-ta-opt:hover{transform:translateY(-2px);border-color:rgba(231,199,126,.55);background:var(--wash2)}
+.bai-ta-opt[aria-pressed="true"]{border-color:var(--g);background:rgba(185,138,46,.16)}
+.bai-ta-qswap{animation:bai-ta-in .4s var(--e)}
+@keyframes bai-ta-in{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}
+.bai-ta-rcards{display:grid;gap:12px;margin:0 0 14px}
+@media (min-width:640px){.bai-ta-rcards{grid-template-columns:1fr 1fr}}
+.bai-ta-rcard{display:block;padding:18px;border-radius:15px;border:1px solid var(--line);background:var(--wash2);color:var(--ink)!important;text-decoration:none;transition:transform .25s var(--e),border-color .25s var(--e)}
+.bai-ta-rcard:hover{transform:translateY(-4px);border-color:rgba(231,199,126,.55)}
+.bai-ta-rcard__n{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--og);background:var(--gl);border-radius:99px;padding:3px 9px;margin:0 0 10px}
+.bai-ta-rcard b{display:block;font-family:"Fraunces",ui-serif,Georgia,serif;font-size:1.1rem;font-weight:600;margin:0 0 6px;color:#fff}
+.bai-ta-rcard span.bai-ta-rcard__d{display:block;font-size:.9rem;line-height:1.55;color:var(--mut)}
+.bai-ta-rcard span.bai-ta-rcard__m{display:block;margin-top:10px;font-size:.78rem;color:var(--gl)}
+
+/* Roadmap: progress ring + stops */
+.bai-ta-road{display:grid;gap:26px;align-items:center;margin:22px 0 0}
+@media (min-width:720px){.bai-ta-road{grid-template-columns:230px 1fr;gap:38px}}
+.bai-ta-ring{position:relative;margin:0 auto;width:min(230px,70vw);text-align:center}
+.bai-ta-ring svg{display:block;width:100%;height:auto;transform:rotate(-90deg)}
+.bai-ta-ring path{fill:none;stroke:var(--line);stroke-width:9;stroke-linecap:round;transition:stroke .5s var(--e)}
+.bai-ta-ring path.is-done{stroke:var(--g)}
+.bai-ta-ring path.is-next{stroke:rgba(231,199,126,.45)}
+.bai-ta-ring__mid{position:absolute;left:0;right:0;top:0;aspect-ratio:1;display:flex;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+.bai-ta-ring__mid b{font-family:"Fraunces",ui-serif,Georgia,serif;font-size:2.6rem;font-weight:600;color:#fff}
+.bai-ta-ring__mid span{color:var(--mut)}
+.bai-ta-ring figcaption{margin-top:10px;font-size:.86rem;color:var(--mut)}
+.bai-ta-stops{position:relative}
+.bai-ta-stops ol{margin:0;padding:0;list-style:none;display:grid;gap:18px}
+.bai-ta-stops__line{position:absolute;left:17px;top:18px;bottom:18px;width:2px;height:calc(100% - 36px);overflow:visible}
+.bai-ta-stops__line path{fill:none;stroke:var(--g);stroke-width:2;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.4s var(--e)}
+.bai-ta-anim .bai-ta-rv .bai-ta-stops__line path{stroke-dashoffset:1}
+.bai-ta-anim .bai-ta-rv.is-in .bai-ta-stops__line path{stroke-dashoffset:0}
+.bai-ta-stops li{position:relative;display:flex;gap:16px;align-items:flex-start}
+.bai-ta-stops li p{margin:0;color:var(--mut);font-size:.92rem}
+.bai-ta-stops__n{position:relative;z-index:1;flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--navy);border:1.5px solid var(--g);color:var(--gl);font-weight:700;font-size:.9rem;transition:background .4s var(--e),color .4s var(--e)}
+.bai-ta-stops li.is-done .bai-ta-stops__n{background:var(--g);color:var(--og)}
+.bai-ta-stops__next .bai-ta-stops__n{border-style:dashed;border-color:var(--mut);color:var(--mut)}
+
+/* Minutes chart */
+.bai-ta-chart{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:9px}
+.bai-ta-chart li{display:grid;grid-template-columns:minmax(0,15ch) 1fr 52px;align-items:center;gap:12px;font-size:.86rem}
+@media (max-width:520px){.bai-ta-chart li{grid-template-columns:1fr 52px}.bai-ta-chart__bar{grid-column:1/-1;grid-row:2}}
+.bai-ta-chart__lab{color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bai-ta-chart__lab b{color:var(--ink);font-weight:600;margin-right:6px}
+.bai-ta-chart__bar{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bai-ta-chart__bar i{display:block;height:100%;width:var(--w);border-radius:6px;background:linear-gradient(90deg,var(--g),var(--gl));transform-origin:0 50%;transition:transform 1s var(--e)}
+.bai-ta-chart li.is-done .bai-ta-chart__bar i{background:var(--gl)}
+.bai-ta-chart__val{text-align:right;font-variant-numeric:tabular-nums;color:var(--ink)}
+.bai-ta-anim .bai-ta-rv .bai-ta-chart__bar i{transform:scaleX(0)}
+.bai-ta-anim .bai-ta-rv.is-in .bai-ta-chart__bar i{transform:none;transition-delay:calc(var(--i)*60ms)}
+.bai-ta-chart__total{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 0!important;padding-top:12px;border-top:1px solid var(--line);color:var(--mut)}
+.bai-ta-chart__total b{font-family:"Fraunces",ui-serif,Georgia,serif;font-size:1.5rem;color:#fff}
+
+/* Exam at a glance */
+.bai-ta-exam{display:grid;gap:14px;margin:20px 0 0}
+@media (min-width:720px){.bai-ta-exam{grid-template-columns:1.25fr 1fr 1fr}}
+.bai-ta-exam figure{display:flex;flex-direction:column;align-items:center;text-align:center;transition:transform .25s var(--e),border-color .25s var(--e)}
+.bai-ta-exam figure:hover{transform:translateY(-4px);border-color:rgba(231,199,126,.4)}
+.bai-ta-exam figcaption{margin-top:14px;font-size:.88rem;color:var(--mut)}
+.bai-ta-exam figcaption b{display:block;color:#fff;font-size:1rem;margin-bottom:2px}
+.bai-ta-pool__grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;width:100%;max-width:220px}
+.bai-ta-pool__grid i{display:block;aspect-ratio:1;border-radius:4px;background:var(--line);transition:background .35s var(--e),transform .35s var(--e)}
+.bai-ta-pool__grid i.is-on{background:var(--g);transform:scale(.92)}
+.bai-ta-gauge{position:relative}
+.bai-ta-gauge svg{width:140px;height:140px;transform:rotate(-90deg)}
+.bai-ta-gauge circle{fill:none;stroke-width:11}
+.bai-ta-gauge__bg{stroke:var(--line)}
+.bai-ta-gauge__fg{stroke:var(--g);stroke-linecap:round;stroke-dasharray:80 100;stroke-dashoffset:0;transition:stroke-dashoffset 1.3s var(--e)}
+.bai-ta-anim .bai-ta-rv .bai-ta-gauge__fg{stroke-dashoffset:80}
+.bai-ta-anim .bai-ta-rv.is-in .bai-ta-gauge__fg{stroke-dashoffset:0}
+.bai-ta-gauge__mid{position:absolute;top:clamp(18px,3.4vw,28px);height:140px;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3px}
+.bai-ta-gauge__mid b{font-family:"Fraunces",ui-serif,Georgia,serif;font-size:2rem;color:#fff}
+.bai-ta-gauge__mid span{color:var(--mut);font-size:.9rem}
+.bai-ta-retake svg{width:64px;height:64px;margin:38px 0 20px;fill:none;stroke:var(--gl);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.bai-ta-retake:hover svg{transform:rotate(-40deg);transition:transform .5s var(--e)}
+
+/* Path to the team */
+.bai-ta-path{counter-reset:none;display:grid;gap:14px;margin:22px 0 0;padding:0;list-style:none}
+@media (min-width:760px){.bai-ta-path{grid-template-columns:repeat(4,1fr)}}
+.bai-ta-path li{position:relative;padding:18px;border-radius:16px;border:1px solid var(--line);background:var(--wash);transition:transform .25s var(--e),border-color .25s var(--e)}
+.bai-ta-path li:hover{transform:translateY(-4px)}
+.bai-ta-path li p{margin:6px 0 0;font-size:.88rem;color:var(--mut)}
+.bai-ta-path__n{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;border:1.5px solid var(--line);color:var(--mut);font-weight:700;font-size:.85rem;margin:0 0 12px}
+.bai-ta-path li.is-here{border-color:var(--g);background:rgba(185,138,46,.1)}
+.bai-ta-path li.is-here .bai-ta-path__n{background:var(--g);border-color:var(--g);color:var(--og)}
+.bai-ta-path__here{position:absolute;top:18px;right:16px;font-size:.68rem;font-weight:700;letter-spacing:.05em;color:var(--og);background:var(--gl);border-radius:99px;padding:3px 9px}
+.bai-ta-path__prog{display:block;margin-top:8px;color:var(--gl);font-weight:600}
+.bai-ta-path__prog:empty{display:none}
+
+@media (prefers-reduced-motion:reduce){
+  .bai-ta *,.bai-ta *:before,.bai-ta *:after{animation:none!important;transition:none!important}
+  .bai-ta-anim .bai-ta-rv{opacity:1!important;transform:none!important}
+  .bai-ta-anim .bai-ta-rv .bai-ta-stairs__bar,.bai-ta-anim .bai-ta-rv .bai-ta-chart__bar i{transform:none!important}
+  .bai-ta-anim .bai-ta-rv .bai-ta-stops__line path,.bai-ta-anim .bai-ta-rv .bai-ta-gauge__fg{stroke-dashoffset:0!important}
+  .bai-ta-btn:hover,.bai-ta-opt:hover,.bai-ta-rcard:hover,.bai-ta-exam figure:hover,.bai-ta-path li:hover{transform:none}
+}

@@ -1,0 +1,136 @@
+<!--
+  Teacher Academy – Preview: new sections for /egitmen-akademisi.
+  Each block starts with an "@section <name>" marker; build.py inserts it at a fixed anchor in
+  the original page HTML (see ANCHORS in build.py). Everything is scoped under .bai-ta.
+  All figures come from the existing pages: 10 modules, module read times, 5-question module
+  quizzes (4 to pass), 30 exam questions from a 64-question pool, 80% pass mark, unlimited
+  retakes, and the 4 steps on /ekibimize-katil.
+-->
+
+<!-- @section journey -->
+<nav class="bai-ta bai-ta-journey" id="bai-ta-journey" aria-label="Bu sayfadaki yolculuk">
+  <ol class="bai-ta-journey__list">
+    <li><a href="#bai-ta-ch1" data-ch="1"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Keşfet</span></a></li>
+    <li><a href="#bai-ta-ch2" data-ch="2"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Yol haritası</span></a></li>
+    <li><a href="#bai-ta-ch3" data-ch="3"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Sertifika</span></a></li>
+    <li><a href="#bai-ta-ch4" data-ch="4"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Sonraki adım</span></a></li>
+  </ol>
+  <div class="bai-ta-journey__bar" aria-hidden="true"><i id="bai-ta-jfill"></i></div>
+</nav>
+
+<!-- @section framework -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch1" aria-labelledby="bai-ta-fw-h">
+  <p class="bai-ta-eyebrow">Çerçeve</p>
+  <h2 id="bai-ta-fw-h">Bu program nerede duruyor?</h2>
+  <p>Cambridge English Öğretmen Yeterlik Çerçevesi, öğretmen gelişimini dört aşamada tanımlar. Öğretme Pusulası bunların ilkini, <b>Foundation</b> aşamasını hedefler: birlikte ders veren herkesin üzerine inşa edeceği ortak pedagojik zemin.</p>
+  <ol class="bai-ta-stairs">
+    <li class="is-here" style="--h:28%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Foundation</span><span class="bai-ta-stairs__tag">Bu program</span></li>
+    <li style="--h:52%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Developing</span></li>
+    <li style="--h:76%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Proficient</span></li>
+    <li style="--h:100%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Expert</span></li>
+  </ol>
+  <p class="bai-ta-note">Diğer üç aşama bu programın kapsamında değildir.</p>
+</section>
+
+<!-- @section quiz -->
+<section class="bai-ta bai-ta-sec bai-ta-rv bai-ta-jsonly bai-ta-quiz" id="bai-ta-quiz" aria-labelledby="bai-ta-q-h">
+  <p class="bai-ta-eyebrow">2 dakikalık öz değerlendirme</p>
+  <h2 id="bai-ta-q-h">Hangi modül sana en çok yarar?</h2>
+  <div class="bai-ta-card">
+    <div id="bai-ta-qintro">
+      <p>Beş kısa durum. Doğru ya da yanlış cevap yok; sonunda, deneyimine göre sana en çok katkı sağlayacak iki modülü görürsün.</p>
+      <p class="bai-ta-note">Bu bir sınav değil. Yanıtların yalnızca tarayıcında işlenir; kaydedilmez ve sunucuya gönderilmez.</p>
+      <button type="button" class="bai-ta-btn" id="bai-ta-qstart">Başla</button>
+    </div>
+    <div id="bai-ta-qplay" hidden>
+      <div class="bai-ta-qhead"><span id="bai-ta-qcount">1 / 5</span><span class="bai-ta-qbar" aria-hidden="true"><i id="bai-ta-qfill"></i></span></div>
+      <h3 id="bai-ta-qtext" tabindex="-1"></h3>
+      <div class="bai-ta-qopts" id="bai-ta-qopts" role="group" aria-labelledby="bai-ta-qtext"></div>
+      <button type="button" class="bai-ta-link" id="bai-ta-qback">← Geri</button>
+    </div>
+    <div id="bai-ta-qresult" hidden>
+      <h3 id="bai-ta-rtitle" tabindex="-1">Senin için öne çıkan iki modül</h3>
+      <div class="bai-ta-rcards" id="bai-ta-rcards"></div>
+      <p class="bai-ta-note">Modüller sırayla açılır. Bu iki modüle, yolculuğa Modül 1'den başlayarak ulaşırsın; her biri bir öncekinin üzerine kurulur.</p>
+      <div class="bai-ta-btns">
+        <a class="bai-ta-btn bai-ta-cta-mirror" href="/egitmen-akademisi/modul-1-ogrenen-kim/">Programa başla</a>
+        <button type="button" class="bai-ta-btn bai-ta-btn--ghost" id="bai-ta-qagain">Yeniden yap</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- @section roadmap -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch2" aria-labelledby="bai-ta-rm-h">
+  <p class="bai-ta-eyebrow">Yol haritası</p>
+  <h2 id="bai-ta-rm-h">Modülden sertifikaya, dört durak</h2>
+  <p>Her modül kısa bir okuma ve beş soruluk bir testle biter. En az dört doğru cevapla bir sonraki modül açılır; on modülün ardından sertifika sınavına girersin.</p>
+  <div class="bai-ta-road">
+    <figure class="bai-ta-ring" aria-labelledby="bai-ta-ringcap">
+      <svg viewBox="0 0 120 120" aria-hidden="true">{{RING_SEGMENTS}}</svg>
+      <div class="bai-ta-ring__mid" aria-hidden="true"><b id="bai-ta-ringn">0</b><span>/ 10</span></div>
+      <figcaption id="bai-ta-ringcap">Modül ilerlemen: <span id="bai-ta-ringtxt">henüz başlamadın</span></figcaption>
+    </figure>
+    <div class="bai-ta-stops">
+      <svg class="bai-ta-stops__line" viewBox="0 0 2 100" preserveAspectRatio="none" aria-hidden="true"><path d="M1 0V100" pathLength="1"/></svg>
+      <ol>
+      <li data-stop="1"><span class="bai-ta-stops__n" aria-hidden="true">1</span><div><h3>On modül</h3><p>Sırayla açılır, kendi hızında ilerlersin.</p></div></li>
+      <li data-stop="2"><span class="bai-ta-stops__n" aria-hidden="true">2</span><div><h3>Modül testleri</h3><p>Her modülün sonunda 5 soru; en az 4 doğru gerekir.</p></div></li>
+      <li data-stop="3"><span class="bai-ta-stops__n" aria-hidden="true">3</span><div><h3>Sertifika sınavı</h3><p>30 senaryo sorusu, geçme notu %80.</p></div></li>
+      <li data-stop="4"><span class="bai-ta-stops__n" aria-hidden="true">4</span><div><h3>Sertifika ve rozet</h3><p>Herkese açık doğrulama kodu taşıyan katılım belgesi.</p></div></li>
+      <li class="bai-ta-stops__next"><span class="bai-ta-stops__n" aria-hidden="true">→</span><div><h3>Sonra: görüşme ve sözleşme</h3><p>Ekibe katılma sürecinin son adımı. <a href="#bai-ta-ch4">Süreci gör</a></p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- @section minutes -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-time" aria-labelledby="bai-ta-tm-h">
+  <p class="bai-ta-eyebrow">Zaman</p>
+  <h2 id="bai-ta-tm-h">Ne kadar zaman ayırmalısın?</h2>
+  <p>Modüllerin okuma süresi 14 ile 18 dakika arasında. Testler ve kendi temponla birlikte toplamda yaklaşık üç saat ayırman yeterli olur; acele etmen gerekmez, ilerlemen tarayıcında saklanır.</p>
+  <ul class="bai-ta-chart" aria-label="Modüllere göre okuma süresi">
+    {{MINUTE_ROWS}}
+  </ul>
+  <p class="bai-ta-chart__total"><span>Toplam okuma</span><b>161 dk</b></p>
+</section>
+
+<!-- @section exam -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch3" aria-labelledby="bai-ta-ex-h">
+  <p class="bai-ta-eyebrow">Sertifika sınavı</p>
+  <h2 id="bai-ta-ex-h">Sınav, bir bakışta</h2>
+  <div class="bai-ta-exam">
+    <figure class="bai-ta-card bai-ta-pool">
+      <div class="bai-ta-pool__grid" id="bai-ta-pool" aria-hidden="true">{{POOL_CELLS}}</div>
+      <figcaption><b>64 soruluk havuz</b><span>Her denemede rastgele 30 soru seçilir.</span></figcaption>
+      <button type="button" class="bai-ta-link bai-ta-jsonly" id="bai-ta-shuffle">Başka bir soru kâğıdı çek</button>
+    </figure>
+    <figure class="bai-ta-card bai-ta-gauge">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bai-ta-gauge__bg" cx="60" cy="60" r="48"/><circle class="bai-ta-gauge__fg" cx="60" cy="60" r="48" pathLength="100"/></svg>
+      <div class="bai-ta-gauge__mid" aria-hidden="true"><b>24</b><span>/ 30</span></div>
+      <figcaption><b>Geçme notu %80</b><span>30 sorudan en az 24 doğru.</span></figcaption>
+    </figure>
+    <figure class="bai-ta-card bai-ta-retake">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 12a7.4 7.4 0 11-2.2-5.2"/><path d="M19.6 4.4v4.2h-4.2"/></svg>
+      <figcaption><b>Sınırsız deneme</b><span>Her seferinde farklı bir soru kâğıdı gelir.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- @section path -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch4" aria-labelledby="bai-ta-pt-h">
+  <p class="bai-ta-eyebrow">Sertifikadan sonra</p>
+  <h2 id="bai-ta-pt-h">Bir Adım İleri ekibine giden yol</h2>
+  <p>Akademi, ekibimize katılma sürecinin üçüncü adımıdır. Başvuru için zorunlu değil, ama tamamlamanı öneririz: eğitmen yaklaşımımızı en iyi anlatan şey bu program.</p>
+  <ol class="bai-ta-path">
+    <li><span class="bai-ta-path__n" aria-hidden="true">1</span><div><h3>Başvur</h3><p>Formu içtenlikle doldur ve CV'ni ekle; iki motivasyon sorusu en değerli bölümdür.</p></div></li>
+    <li><span class="bai-ta-path__n" aria-hidden="true">2</span><div><h3>Değerlendirip davet ediyoruz</h3><p>Nitelik, deneyim ve uyumu değerlendiririz; uygun görülürse seni öğretmen hesabına davet ederiz.</p></div></li>
+    <li class="is-here"><span class="bai-ta-path__n" aria-hidden="true">3</span><span class="bai-ta-path__here">Bu sayfadasın</span><div><h3>Eğitmen Akademisi</h3><p>Öğretmenler için on modüllük ücretsiz kursu tamamla, sertifikanı al. <span class="bai-ta-path__prog" id="bai-ta-pathprog"></span></p></div></li>
+    <li><span class="bai-ta-path__n" aria-hidden="true">4</span><div><h3>Görüşme ve sözleşme</h3><p>30 dakikalık çevrim içi görüşmenin ardından sözleşmeni imzalarsın; onaydan sonra öğrenciler seninle ders planlayabilir.</p></div></li>
+  </ol>
+  <div class="bai-ta-btns">
+    <a class="bai-ta-btn bai-ta-cta-mirror" href="/egitmen-akademisi/modul-1-ogrenen-kim/">Programa başla</a>
+    <a class="bai-ta-btn bai-ta-btn--ghost" href="/ekibimize-katil/#basvuru-formu">Henüz başvurmadın mı? Başvuruya başla</a>
+  </div>
+  <p class="bai-ta-note">Her başvuruyla iş birliği kurulamayabilir; sonuç ne olursa olsun değerlendirildiğini bilmeni isteriz.</p>
+</section>
