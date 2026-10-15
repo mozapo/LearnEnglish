@@ -1,0 +1,133 @@
+<!--
+  Educator Academy – Preview: new sections for /en/educator-academy (English twin of sections.html).
+  British English, matching the existing page ("programme"). Step texts for the path to the team
+  are quoted from /en/teach-with-us; exam and certificate wording follows the hub page.
+-->
+
+<!-- @section journey -->
+<nav class="bai-ta bai-ta-journey" id="bai-ta-journey" aria-label="Your journey through this page">
+  <ol class="bai-ta-journey__list">
+    <li><a href="#bai-ta-ch1" data-ch="1"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Explore</span></a></li>
+    <li><a href="#bai-ta-ch2" data-ch="2"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Roadmap</span></a></li>
+    <li><a href="#bai-ta-ch3" data-ch="3"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Certificate</span></a></li>
+    <li><a href="#bai-ta-ch4" data-ch="4"><span class="bai-ta-journey__dot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 12.4l3.2 3.2L17 8.8"/></svg></span><span>Next step</span></a></li>
+  </ol>
+  <div class="bai-ta-journey__bar" aria-hidden="true"><i id="bai-ta-jfill"></i></div>
+</nav>
+
+<!-- @section framework -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch1" aria-labelledby="bai-ta-fw-h">
+  <p class="bai-ta-eyebrow">Framework</p>
+  <h2 id="bai-ta-fw-h">Where this programme sits</h2>
+  <p>The Cambridge English Teaching Framework describes a teacher's development in four stages. The Teaching Compass targets the first of them, <b>Foundation</b>: the shared pedagogical ground everyone who teaches with us builds on.</p>
+  <ol class="bai-ta-stairs">
+    <li class="is-here" style="--h:28%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Foundation</span><span class="bai-ta-stairs__tag">This programme</span></li>
+    <li style="--h:52%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Developing</span></li>
+    <li style="--h:76%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Proficient</span></li>
+    <li style="--h:100%"><span class="bai-ta-stairs__bar" aria-hidden="true"></span><span class="bai-ta-stairs__name">Expert</span></li>
+  </ol>
+  <p class="bai-ta-note">The other three stages are outside the scope of this programme.</p>
+</section>
+
+<!-- @section quiz -->
+<section class="bai-ta bai-ta-sec bai-ta-rv bai-ta-jsonly bai-ta-quiz" id="bai-ta-quiz" aria-labelledby="bai-ta-q-h">
+  <p class="bai-ta-eyebrow">A 2-minute self-check</p>
+  <h2 id="bai-ta-q-h">Which module will help you most?</h2>
+  <div class="bai-ta-card">
+    <div id="bai-ta-qintro">
+      <p>Five short situations. There are no right or wrong answers; at the end you will see the two modules most likely to add to your experience.</p>
+      <p class="bai-ta-note">This is not a test. Your answers are handled only in your browser; they are not saved or sent anywhere.</p>
+      <button type="button" class="bai-ta-btn" id="bai-ta-qstart">Start</button>
+    </div>
+    <div id="bai-ta-qplay" hidden>
+      <div class="bai-ta-qhead"><span id="bai-ta-qcount">1 / 5</span><span class="bai-ta-qbar" aria-hidden="true"><i id="bai-ta-qfill"></i></span></div>
+      <h3 id="bai-ta-qtext" tabindex="-1"></h3>
+      <div class="bai-ta-qopts" id="bai-ta-qopts" role="group" aria-labelledby="bai-ta-qtext"></div>
+      <button type="button" class="bai-ta-link" id="bai-ta-qback">← Back</button>
+    </div>
+    <div id="bai-ta-qresult" hidden>
+      <h3 id="bai-ta-rtitle" tabindex="-1">Two modules that stand out for you</h3>
+      <div class="bai-ta-rcards" id="bai-ta-rcards"></div>
+      <p class="bai-ta-note">Modules open in order: the journey starts with Module 1 and each module builds on the one before.</p>
+      <div class="bai-ta-btns">
+        <a class="bai-ta-btn bai-ta-cta-mirror" href="/en/educator-academy/module-1-who-is-the-learner/">Start the programme</a>
+        <button type="button" class="bai-ta-btn bai-ta-btn--ghost" id="bai-ta-qagain">Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- @section roadmap -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch2" aria-labelledby="bai-ta-rm-h">
+  <p class="bai-ta-eyebrow">Roadmap</p>
+  <h2 id="bai-ta-rm-h">From module to certificate, in four stops</h2>
+  <p>Each module is a short reading that ends with a five-question check. Four correct answers open the next module; after all ten you can take the certification exam.</p>
+  <div class="bai-ta-road">
+    <figure class="bai-ta-ring" aria-labelledby="bai-ta-ringcap">
+      <svg viewBox="0 0 120 120" aria-hidden="true">{{RING_SEGMENTS}}</svg>
+      <div class="bai-ta-ring__mid" aria-hidden="true"><b id="bai-ta-ringn">0</b><span>/ 10</span></div>
+      <figcaption id="bai-ta-ringcap">Your module progress: <span id="bai-ta-ringtxt">not started yet</span></figcaption>
+    </figure>
+    <div class="bai-ta-stops">
+      <svg class="bai-ta-stops__line" viewBox="0 0 2 100" preserveAspectRatio="none" aria-hidden="true"><path d="M1 0V100" pathLength="1"/></svg>
+      <ol>
+      <li data-stop="1"><span class="bai-ta-stops__n" aria-hidden="true">1</span><div><h3>Ten modules</h3><p>They open in order, and you go at your own pace.</p></div></li>
+      <li data-stop="2"><span class="bai-ta-stops__n" aria-hidden="true">2</span><div><h3>Module checks</h3><p>5 questions at the end of each module; at least 4 correct.</p></div></li>
+      <li data-stop="3"><span class="bai-ta-stops__n" aria-hidden="true">3</span><div><h3>Certification exam</h3><p>30 scenario questions, pass mark 80%.</p></div></li>
+      <li data-stop="4"><span class="bai-ta-stops__n" aria-hidden="true">4</span><div><h3>Certificate and badge</h3><p>A record of completion with a publicly verifiable code.</p></div></li>
+      <li class="bai-ta-stops__next"><span class="bai-ta-stops__n" aria-hidden="true">→</span><div><h3>Then: interview and agreement</h3><p>The last step of joining the team. <a href="#bai-ta-ch4">See the process</a></p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- @section minutes -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-time" aria-labelledby="bai-ta-tm-h">
+  <p class="bai-ta-eyebrow">Time</p>
+  <h2 id="bai-ta-tm-h">How much time should you set aside?</h2>
+  <p>Each module takes an estimated 14 to 18 minutes to read. With the checks and at your own pace, the whole programme takes about three hours; there is no rush, and your progress is stored in your browser.</p>
+  <ul class="bai-ta-chart" aria-label="Estimated reading time per module">
+    {{MINUTE_ROWS}}
+  </ul>
+  <p class="bai-ta-chart__total"><span>With the checks, at your own pace</span><b>~3 hours</b></p>
+</section>
+
+<!-- @section exam -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch3" aria-labelledby="bai-ta-ex-h">
+  <p class="bai-ta-eyebrow">Certification exam</p>
+  <h2 id="bai-ta-ex-h">The exam at a glance</h2>
+  <div class="bai-ta-exam">
+    <figure class="bai-ta-card bai-ta-pool">
+      <div class="bai-ta-pool__grid" id="bai-ta-pool" aria-hidden="true">{{POOL_CELLS}}</div>
+      <figcaption><b>A 64-item bank</b><span>30 questions are drawn at random for each attempt.</span></figcaption>
+      <button type="button" class="bai-ta-link bai-ta-jsonly" id="bai-ta-shuffle">Draw another paper</button><span class="bai-ta-sr" id="bai-ta-poollive" aria-live="polite"></span>
+    </figure>
+    <figure class="bai-ta-card bai-ta-gauge">
+      <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bai-ta-gauge__bg" cx="60" cy="60" r="48"/><circle class="bai-ta-gauge__fg" cx="60" cy="60" r="48" pathLength="100"/></svg>
+      <div class="bai-ta-gauge__mid" aria-hidden="true"><b>24</b><span>/ 30</span></div>
+      <figcaption><b>Pass mark 80%</b><span>At least 24 of the 30 questions.</span></figcaption>
+    </figure>
+    <figure class="bai-ta-card bai-ta-retake">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.4 12a7.4 7.4 0 11-2.2-5.2"/><path d="M19.6 4.4v4.2h-4.2"/></svg>
+      <figcaption><b>Unlimited retakes</b><span>The paper is different every time.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- @section path -->
+<section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-ch4" aria-labelledby="bai-ta-pt-h">
+  <p class="bai-ta-eyebrow">After the certificate</p>
+  <h2 id="bai-ta-pt-h">Your path to the Bir Adım İleri team</h2>
+  <p>The academy is the third step of joining our team. Not required to apply, but recommended: it is the best description of how we teach.</p>
+  <ol class="bai-ta-path">
+    <li><span class="bai-ta-path__n" aria-hidden="true">1</span><div><h3>Apply</h3><p>Fill in the form honestly and attach your CV; the two motivation questions matter most.</p></div></li>
+    <li><span class="bai-ta-path__n" aria-hidden="true">2</span><div><h3>We review and invite</h3><p>We look at qualifications, experience and fit; if there is a fit, we invite you to your teacher account.</p></div></li>
+    <li class="is-here"><span class="bai-ta-path__n" aria-hidden="true">3</span><span class="bai-ta-path__here">You are here</span><div><h3>Educator Academy</h3><p>Complete our free ten-module course for teachers and earn your certificate. <span class="bai-ta-path__prog" id="bai-ta-pathprog"></span></p></div></li>
+    <li><span class="bai-ta-path__n" aria-hidden="true">4</span><div><h3>Interview and agreement</h3><p>A 30-minute online interview, then your agreement. Once you are approved, students can book lessons with you.</p></div></li>
+  </ol>
+  <div class="bai-ta-btns">
+    <a class="bai-ta-btn bai-ta-cta-mirror" href="/en/educator-academy/module-1-who-is-the-learner/">Start the programme</a>
+    <a class="bai-ta-btn bai-ta-btn--ghost" href="/en/teach-with-us/#application-form">Not applied yet? Start your application</a>
+  </div>
+  <p class="bai-ta-note">We can’t work with every applicant, but every application is read.</p>
+</section>

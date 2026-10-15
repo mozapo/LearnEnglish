@@ -10,6 +10,8 @@ Only run after explicit approval. Safety:
 
 Usage: python3 teacher-academy/build.py --live && python3 teacher-academy/publish_live.py --yes
        python3 teacher-academy/publish_live.py --rollback --yes
+       --staging: same for the STAGING copy of the page (backup = its file in original/)
+       --lang en: the English page /en/educator-academy (ID 4359) instead of 4358
 """
 import base64
 import json
@@ -21,15 +23,25 @@ import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-PAGE_ID = 4358
-BACKUP = HERE / "backup" / "live-4358-content.html"
-BUILD = HERE / "dist" / "teacher-academy-live.html"
+LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "tr"
+PAGE_ID, SLUG, NAME, OUT = {"tr": (4358, "egitmen-akademisi", "egitmen-akademisi-4358", "teacher-academy"),
+                            "en": (4359, "educator-academy", "educator-academy-4359", "educator-academy")}[LANG]
+STAGING = "--staging" in sys.argv
+if STAGING:
+    BACKUP = HERE / "original" / f"{NAME}.html"
+    BUILD = HERE / "dist" / f"{OUT}-preview.html"
+    base = os.environ["WP_STAGING_URL"].rstrip("/")
+    password = os.environ["WP_STAGING_APP_PASSWORD"]
+else:
+    BACKUP = HERE / "backup" / f"live-{PAGE_ID}-content.html"
+    BUILD = HERE / "dist" / f"{OUT}-live.html"
+    base = os.environ["WP_URL"].rstrip("/")
+    password = os.environ["WP_APP_PASSWORD"]
 
 if "--yes" not in sys.argv:
-    sys.exit("publish_live: this writes to the LIVE site; re-run with --yes once approved.")
+    sys.exit("publish_live: this writes to the site; re-run with --yes once approved.")
 rollback = "--rollback" in sys.argv
-base = os.environ["WP_URL"].rstrip("/")
-auth = base64.b64encode(f'{os.environ["WP_USER"]}:{os.environ["WP_APP_PASSWORD"]}'.encode()).decode()
+auth = base64.b64encode(f'{os.environ["WP_USER"]}:{password}'.encode()).decode()
 
 
 def api(method, path, body=None):
@@ -48,8 +60,8 @@ new = backup if rollback else BUILD.read_text(encoding="utf-8")
 expected_now = BUILD.read_text(encoding="utf-8") if rollback else backup
 
 before = api("GET", f"/pages/{PAGE_ID}?context=edit&_fields=id,slug,status,template,title,content")
-if before["slug"] != "egitmen-akademisi" or before["status"] != "publish":
-    sys.exit(f"publish_live: page {PAGE_ID} is not the published egitmen-akademisi page; stopping.")
+if before["slug"] != SLUG or before["status"] != "publish":
+    sys.exit(f"publish_live: page {PAGE_ID} is not the published {SLUG} page; stopping.")
 if before["content"]["raw"] == new:
     print("publish_live: live content is already this version; nothing to do.")
     sys.exit(0)
@@ -78,4 +90,4 @@ if problems:
     sys.exit("publish_live: WRITTEN BUT VERIFICATION FAILED: " + "; ".join(problems)
              + "\n  Roll back with: python3 teacher-academy/publish_live.py --rollback --yes")
 
-print(f"publish_live: {'rolled back' if rollback else 'updated'} live page {PAGE_ID} and verified ({base}/egitmen-akademisi/)")
+print(f"publish_live: {'rolled back' if rollback else 'updated'} {'staging' if STAGING else 'live'} page {PAGE_ID} and verified (page {SLUG})")

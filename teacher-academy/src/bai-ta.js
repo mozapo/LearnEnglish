@@ -1,7 +1,8 @@
 /* Teacher Academy – Preview: behaviour for the new .bai-ta sections.
    WordPress content rules (same as the original hub script): ES5 only, every statement ends
    with a semicolon, no "&&", no line comments, no literal "<" in strings. build.py checks this.
-   Reads the hub's progress (localStorage "bai_ac_tr") but never writes to it. */
+   Reads the hub's progress (localStorage "bai_ac_" + language) but never writes to it.
+   All visible strings come from the per-language data block (D.s). */
 (function(){
   "use strict";
   var doc = document;
@@ -13,10 +14,12 @@
 
   var D = { mods: [], quiz: [] };
   try { D = JSON.parse($("bai-ta-data").textContent); } catch(err){ return; }
+  var S = D.s;
+  function fmt(t, n){ return t.replace("{n}", String(n)); }
 
   function readState(){
     try {
-      var o = JSON.parse(window.localStorage.getItem("bai_ac_tr") || "null");
+      var o = JSON.parse(window.localStorage.getItem("bai_ac_" + D.lang) || "null");
       if(!o){ return { m: {} }; }
       if(!o.m){ o.m = {}; }
       return o;
@@ -66,7 +69,7 @@
     });
     if($("bai-ta-ringn")){ $("bai-ta-ringn").textContent = String(n); }
     if($("bai-ta-ringtxt")){
-      $("bai-ta-ringtxt").textContent = n === 0 ? "henüz başlamadın" : (n === 10 ? "tüm modüller tamamlandı" : n + " modül tamamlandı");
+      $("bai-ta-ringtxt").textContent = n === 0 ? S.ring0 : (n === 10 ? S.ringAll : fmt(n === 1 ? S.ringOne : S.ringN, n));
     }
     each(doc.querySelectorAll(".bai-ta-stops li[data-stop]"), function(li){
       var s = li.getAttribute("data-stop");
@@ -76,7 +79,7 @@
       li.classList.toggle("is-done", isDone(st, li.getAttribute("data-m")));
     });
     var pp = $("bai-ta-pathprog");
-    if(pp){ pp.textContent = cert ? "Sertifikan hazır." : (n > 0 ? n + " / 10 modül tamamlandı." : ""); }
+    if(pp){ pp.textContent = cert ? S.certReady : (n > 0 ? fmt(S.pathN, n) : ""); }
   }
 
   /* Our CTAs follow the hub's hero CTA (Programa başla / Kaldığın yerden devam et / Sertifika sınavına gir) */
@@ -115,7 +118,7 @@
     update();
   }
 
-  /* "Hangi modül sana en çok yarar?" */
+  /* Module-match quiz ("Hangi modül sana en çok yarar?" / "Which module will help you most?") */
   function quiz(){
     var intro = $("bai-ta-qintro"), play = $("bai-ta-qplay"), res = $("bai-ta-qresult");
     if(!intro){ return; }
@@ -123,7 +126,7 @@
     function show(which){ intro.hidden = which !== intro; play.hidden = which !== play; res.hidden = which !== res; }
     function render(){
       var q = Q[cur], box = $("bai-ta-qopts");
-      $("bai-ta-qcount").textContent = "Soru " + (cur + 1) + " / " + Q.length;
+      $("bai-ta-qcount").textContent = S.question + " " + (cur + 1) + " / " + Q.length;
       $("bai-ta-qfill").style.transform = "scaleX(" + ((cur + 1) / Q.length) + ")";
       $("bai-ta-qtext").textContent = q.q;
       while(box.firstChild){ box.removeChild(box.firstChild); }
@@ -147,10 +150,10 @@
       for(k = 0; k !== 2; k++){
         var m = order[k], a = el("a", "bai-ta-rcard");
         a.href = m.u;
-        a.appendChild(el("span", "bai-ta-rcard__n", "Modül " + m.n));
+        a.appendChild(el("span", "bai-ta-rcard__n", S.module + " " + m.n));
         a.appendChild(el("b", null, m.t));
         a.appendChild(el("span", "bai-ta-rcard__d", m.d));
-        a.appendChild(el("span", "bai-ta-rcard__m", m.min + " dk okuma"));
+        a.appendChild(el("span", "bai-ta-rcard__m", m.min + " " + S.minRead));
         box.appendChild(a);
       }
       mirror();
@@ -175,7 +178,7 @@
     }
     draw();
     var b = $("bai-ta-shuffle");
-    if(b){ b.addEventListener("click", function(){ draw(); var lv = $("bai-ta-poollive"); if(lv){ lv.textContent = ""; window.setTimeout(function(){ lv.textContent = "Yeni bir soru kâğıdı: 64 sorudan rastgele 30 soru seçildi."; }, 60); } }); }
+    if(b){ b.addEventListener("click", function(){ draw(); var lv = $("bai-ta-poollive"); if(lv){ lv.textContent = ""; window.setTimeout(function(){ lv.textContent = S.newPaper; }, 60); } }); }
   }
 
   function boot(){

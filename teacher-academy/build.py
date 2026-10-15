@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Build the "Teacher Academy – Preview" page content.
+"""Build the Teacher Academy page content (Turkish /egitmen-akademisi or English /en/educator-academy).
 
 Takes the untouched hub HTML in original/ and inserts the new .bai-ta sections, CSS and JS at
-fixed anchors. Output: dist/teacher-academy-preview.html, ready to be used as page content.
+fixed anchors. Output goes to dist/, ready to be used as page content.
 
-Usage: python3 teacher-academy/build.py                 # staging preview (original/ from staging)
-       python3 teacher-academy/build.py --live          # live version, built on the live page content
+Usage: python3 teacher-academy/build.py [--lang tr|en] [--live]
+  --lang  tr (default): page 4358 · en: page 4359
+  --live  build on the live page content instead of the staging copy (keeps live URLs)
 """
+import html as html_lib
 import json
 import math
 import re
@@ -15,11 +17,10 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 LIVE = "--live" in sys.argv
-ORIGINAL = HERE / "original" / ("egitmen-akademisi-4358-live.html" if LIVE else "egitmen-akademisi-4358.html")
-OUT = HERE / "dist" / ("teacher-academy-live.html" if LIVE else "teacher-academy-preview.html")
+LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "tr"
 
 # Module titles, read times and ledes come from the live module pages (ledes quoted, some cut to their first sentences).
-MODS = [
+MODS_TR = [
     (1, "Öğrenen Kim?", 14, "modul-1-ogrenen-kim",
      "İyi öğretmenin başladığı yer konu değil, karşındaki insandır. Bu modül, ilk dersten önce ve ilk dersin içinde öğrenenini nasıl gerçekten tanıyacağını anlatır."),
     (2, "Öğrenme Nasıl Çalışır?", 16, "modul-2-ogrenme-nasil-calisir",
@@ -43,7 +44,7 @@ MODS = [
 ]
 
 # Self-reflection quiz. "m" lists the modules an answer points to; the first one weighs double.
-QUIZ = [
+QUIZ_TR = [
     {"q": "Yeni bir öğrenenle ilk dersinde en çok neyi merak edersin?", "o": [
         {"t": "Söylediği hedefin altında gerçekte neye ihtiyaç duyduğunu", "m": [1]},
         {"t": "Öğrendiklerini nasıl kalıcı hâle getireceğini", "m": [2]},
@@ -72,15 +73,95 @@ QUIZ = [
 ]
 
 # Each new block goes right before (or after) an exact string in the original HTML.
-ANCHORS = [
-    ("journey",   "after",  '<hr class="bai-ac__rule">'),
-    ("framework", "after",  "</span></li></ul>" + '<div class="bai-ac__sec bai-ac__rv"><h2>Bu program neyi değiştirir?</h2>'),
-    ("quiz",      "before", '<div class="bai-ac__sec bai-ac__rv"><h2>Program</h2>'),
-    ("roadmap",   "before", '<div class="bai-ac__sec bai-ac__rv"><h2>Program</h2>'),
-    ("minutes",   "before", '<div class="bai-ac__sec bai-ac__rv"><h2>Sertifika ve rozet</h2>'),
-    ("exam",      "before", '<div class="bai-ac__sec bai-ac__rv"><h2>Sık sorulanlar</h2>'),
-    ("path",      "before", '<div class="bai-ac__sec bai-ac__rv"><h2>Sık sorulanlar</h2>'),
+def anchors(changes, programme, certificate, faq):
+    sec = '<div class="bai-ac__sec bai-ac__rv"><h2>{}</h2>'.format
+    return [
+        ("journey",   "after",  '<hr class="bai-ac__rule">'),
+        ("framework", "after",  "</span></li></ul>" + sec(changes)),
+        ("quiz",      "before", sec(programme)),
+        ("roadmap",   "before", sec(programme)),
+        ("minutes",   "before", sec(certificate)),
+        ("exam",      "before", sec(faq)),
+        ("path",      "before", sec(faq)),
+    ]
+
+
+# English twin. Titles, read times and ledes are quoted from the live /en/educator-academy module pages.
+MODS_EN = [
+    (1, "Who Is the Learner?", 14, "module-1-who-is-the-learner",
+     "Good teaching does not begin with the subject. It begins with the person in front of you. This module is about how to actually know your learner — before the first lesson, and inside it."),
+    (2, "How Learning Works", 16, "module-2-how-learning-works",
+     "Learning is counter-intuitive. Most study methods that feel good do not work, and most methods that work feel hard."),
+    (3, "Designing a Session", 15, "module-3-designing-a-session",
+     "An unplanned lesson becomes a conversation. A good lesson is a designed structure with an opening, a rise and a close."),
+    (4, "Motivation & Psychological Safety", 17, "module-4-motivation-and-psychological-safety",
+     "Most learners stall not because they lack ability but because they do not feel safe."),
+    (5, "Understanding Age Groups", 16, "module-5-understanding-age-groups",
+     "A seven-year-old, a fifteen-year-old and a forty-year-old professional do not learn the same way. The same content means three different lessons."),
+    (6, "Feedback & Assessment", 15, "module-6-feedback-and-assessment",
+     "The purpose of feedback is not to grade work already done but to make the next piece of work better."),
+    (7, "Difficult Moments", 17, "module-7-difficult-moments",
+     "The moments every educator meets and no syllabus covers: the learner who shuts down, the parent who intervenes, progress that stops, and the moment a learner tells you something hard."),
+    (8, "Inclusion, Ethics & Safeguarding", 16, "module-8-inclusion-ethics-safeguarding",
+     "Good teaching is not only effective teaching. It is safe and fair teaching. This module covers different learner profiles, professional boundaries, child protection and your responsibility for data."),
+    (9, "Teaching Online", 18, "module-9-teaching-online",
+     "An online lesson is not an in-person lesson moved to a screen: gaze, attention, setting and trust all work by different rules here."),
+    (10, "Professionalism & Work Ethic", 17, "module-10-professionalism-and-work-ethic",
+     "An educator's quality is not measured only by what they know inside the lesson. Arriving on time, being prepared, keeping your word, owning your mistakes and treating every learner with the same care are part of the job too."),
 ]
+
+QUIZ_EN = [
+    {"q": "In a first lesson with a new learner, what are you most curious about?", "o": [
+        {"t": "What they really need beneath the goal they state", "m": [1]},
+        {"t": "How to make what they learn stick", "m": [2]},
+        {"t": "How to shape the forty minutes", "m": [3]},
+        {"t": "Whether they feel comfortable and safe", "m": [4]}]},
+    {"q": "Which of these do you find hardest?", "o": [
+        {"t": "Explaining the same topic to a seven-year-old and to an adult", "m": [5]},
+        {"t": "Correcting mistakes without dampening a learner's enthusiasm", "m": [6, 4]},
+        {"t": "Knowing what to do when a learner shuts down or struggles mid-lesson", "m": [7]},
+        {"t": "Keeping attention and connection alive on screen", "m": [9]}]},
+    {"q": "A learner's progress has stalled. What is your first step?", "o": [
+        {"t": "Look at how they study and what they review", "m": [2]},
+        {"t": "Rethink how I measure progress", "m": [6]},
+        {"t": "Talk openly with them, and with a parent if needed", "m": [7]},
+        {"t": "Rebuild my lesson plan", "m": [3]}]},
+    {"q": "As an educator, what do you think about most?", "o": [
+        {"t": "Every learner feeling they belong in the lesson", "m": [8, 4]},
+        {"t": "Drawing my professional boundaries well", "m": [8, 7]},
+        {"t": "Being on time, prepared and true to my word", "m": [10]},
+        {"t": "Understanding the real story of the person in front of me", "m": [1]}]},
+    {"q": "Which learners do you most want to work with?", "o": [
+        {"t": "Children", "m": [5, 8]},
+        {"t": "Teenagers", "m": [5, 4]},
+        {"t": "Adults and professionals", "m": [5, 1]},
+        {"t": "Learners of different ages, online", "m": [9, 5]}]},
+]
+
+LANGS = {
+    "tr": {
+        "page": "egitmen-akademisi-4358", "out": "teacher-academy", "sections": "sections.html",
+        "prefix": "/egitmen-akademisi/", "unit": "dk", "mods": MODS_TR, "quiz": QUIZ_TR,
+        "anchors": anchors("Bu program neyi değiştirir?", "Program", "Sertifika ve rozet", "Sık sorulanlar"),
+        "s": {"ring0": "henüz başlamadın", "ringAll": "tüm modüller tamamlandı", "ringOne": "{n} modül tamamlandı",
+              "ringN": "{n} modül tamamlandı", "certReady": "Sertifikan hazır.", "pathN": "{n} / 10 modül tamamlandı.",
+              "question": "Soru", "module": "Modül", "minRead": "dk okuma",
+              "newPaper": "Yeni bir soru kâğıdı: 64 sorudan rastgele 30 soru seçildi."},
+    },
+    "en": {
+        "page": "educator-academy-4359", "out": "educator-academy", "sections": "sections.en.html",
+        "prefix": "/en/educator-academy/", "unit": "min", "mods": MODS_EN, "quiz": QUIZ_EN,
+        "anchors": anchors("What this programme changes", "The programme", "Certificate and badge", "Frequently asked"),
+        "s": {"ring0": "not started yet", "ringAll": "all modules complete", "ringOne": "{n} module complete",
+              "ringN": "{n} modules complete", "certReady": "Your certificate is ready.", "pathN": "{n} / 10 modules complete.",
+              "question": "Question", "module": "Module", "minRead": "min read",
+              "newPaper": "New paper: 30 questions drawn at random from the 64-item bank."},
+    },
+}
+L = LANGS[LANG]
+ORIGINAL = HERE / "original" / (L["page"] + ("-live" if LIVE else "") + ".html")
+OUT = HERE / "dist" / (L["out"] + ("-live" if LIVE else "-preview") + ".html")
+ANCHORS = L["anchors"]
 
 
 def ring_segments():
@@ -95,12 +176,12 @@ def ring_segments():
 
 def minute_rows():
     rows = []
-    for i, (n, title, mins, _slug, _d) in enumerate(MODS):
+    for i, (n, title, mins, _slug, _d) in enumerate(L["mods"]):
         rows.append(
             f'<li data-m="{n}" style="--w:{mins / 18 * 100:.1f}%;--i:{i}">'
-            f'<span class="bai-ta-chart__lab"><b>{n}</b>{title}</span>'
+            f'<span class="bai-ta-chart__lab"><b>{n}</b>{html_lib.escape(title, quote=False)}</span>'
             f'<span class="bai-ta-chart__bar" aria-hidden="true"><i></i></span>'
-            f'<span class="bai-ta-chart__val">{mins} dk</span></li>')
+            f'<span class="bai-ta-chart__val">{mins} {L["unit"]}</span></li>')
     return "".join(rows)
 
 
@@ -138,7 +219,7 @@ def check_wp_safe(name, s, is_js=False):
 def main():
     original = ORIGINAL.read_text(encoding="utf-8")
     parts = {}
-    src = (HERE / "src" / "sections.html").read_text(encoding="utf-8")
+    src = (HERE / "src" / L["sections"]).read_text(encoding="utf-8")
     for m in re.finditer(r"<!-- @section (\w+) -->(.*?)(?=<!-- @section |\Z)", src, flags=re.S):
         parts[m.group(1)] = minify_html(m.group(2))
     parts["roadmap"] = parts["roadmap"].replace("{{RING_SEGMENTS}}", ring_segments())
@@ -157,10 +238,15 @@ def main():
     css = minify_css((HERE / "src" / "bai-ta.css").read_text(encoding="utf-8"))
     js = minify_js((HERE / "src" / "bai-ta.js").read_text(encoding="utf-8"))
     data = json_for_script({
-        "mods": [{"n": n, "t": t, "min": mins, "u": f"/egitmen-akademisi/{slug}/", "d": d}
-                 for n, t, mins, slug, d in MODS],
-        "quiz": QUIZ,
+        "lang": LANG,
+        "s": L["s"],
+        "mods": [{"n": n, "t": t, "min": mins, "u": f'{L["prefix"]}{slug}/', "d": d}
+                 for n, t, mins, slug, d in L["mods"]],
+        "quiz": L["quiz"],
     })
+    hub_lang = json.loads(re.search(r'id="bai-ac-data"[^>]*>(.*?)</script>', original, flags=re.S).group(1))["lang"]
+    if hub_lang != LANG:
+        sys.exit(f"build: original page is the '{hub_lang}' hub, but --lang is '{LANG}'")
     check_wp_safe("bai-ta.js", js, is_js=True)
     check_wp_safe("bai-ta-data", data)
 

@@ -8,6 +8,7 @@ Safety:
     the original /egitmen-akademisi page (ID 4358).
 
 Usage: python3 teacher-academy/build.py && python3 teacher-academy/publish_staging.py
+       python3 teacher-academy/build.py --lang en && python3 teacher-academy/publish_staging.py --lang en
 """
 import base64
 import json
@@ -20,10 +21,11 @@ import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-CONTENT = HERE / "dist" / "teacher-academy-preview.html"
-STATE = HERE / "staging-page.json"
-ORIGINAL_ID = 4358
-TITLE = "Teacher Academy – Preview"
+LANG = sys.argv[sys.argv.index("--lang") + 1] if "--lang" in sys.argv else "tr"
+CONTENT = HERE / "dist" / ("educator-academy-preview.html" if LANG == "en" else "teacher-academy-preview.html")
+STATE = HERE / ("staging-page-en.json" if LANG == "en" else "staging-page.json")
+ORIGINAL_ID = 4359 if LANG == "en" else 4358
+TITLE = "Educator Academy – Preview" if LANG == "en" else "Teacher Academy – Preview"
 
 base = os.environ["WP_STAGING_URL"].rstrip("/")
 live = os.environ.get("WP_URL", "").rstrip("/")

@@ -5,6 +5,12 @@ const path = require("path");
 
 const target = /^https?:/.test(process.argv[2]) ? process.argv[2] : "file://" + path.resolve(process.argv[2]);
 const shots = path.resolve(process.argv[3] || ".");
+// Language of the page under test: TA_LANG=en for /en/educator-academy (default tr).
+const LANG = process.env.TA_LANG || "tr";
+const T = {
+  tr: { path3: "3 / 10 modül tamamlandı.", pool: /30 soru/, badge: "10 Modül" },
+  en: { path3: "3 / 10 modules complete.", pool: /30 questions/, badge: "10 modules" },
+}[LANG];
 const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined;
 let failures = 0;
 const check = (ok, msg) => { console.log((ok ? "PASS " : "FAIL ") + msg); if (!ok) failures++; };
@@ -16,13 +22,13 @@ async function open(browser, opts) {
   p.on("pageerror", (e) => errors.push(e.message));
   p.on("console", (m) => { if (m.type() === "error" && /bai-ta|bai_ta/.test(m.text())) errors.push(m.text()); });
   if (opts.progress) {
-    await p.addInitScript((st) => { try { localStorage.setItem("bai_ac_tr", JSON.stringify(st)); } catch (e) {} }, opts.progress);
+    await p.addInitScript((st) => { try { localStorage.setItem(st.key, JSON.stringify(st.value)); } catch (e) {} }, { key: "bai_ac_" + LANG, value: opts.progress });
   }
   // Never write to a real site from a test: block every non-GET request to WordPress.
   await ctx.route(/\/wp-json\/|admin-ajax\.php/, (r) => (r.request().method() === "GET" ? r.continue() : r.abort()));
   await p.goto(target, { waitUntil: "load", timeout: 90000 });
   await p.waitForTimeout(800);
-  const reject = await p.$("text=Yalnızca Gerekli");
+  const reject = (await p.$("text=Yalnızca Gerekli")) || (await p.$("text=Only necessary"));
   if (reject) { await reject.click().catch(() => {}); await p.waitForTimeout(300); }
   return { ctx, p, errors };
 }
@@ -45,7 +51,7 @@ async function scrollThrough(p) {
     check(errors.length === 0, `${vp.name}: no script errors ${errors.join(" | ")}`);
     const ring = await p.evaluate(() => [document.getElementById("bai-ta-ringn").textContent, document.querySelectorAll(".bai-ta-ring path.is-done").length, document.getElementById("bai-ta-pathprog").textContent]);
     check(ring[0] === "3" && ring[1] === 3, `${vp.name}: ring shows real progress 3/10 (${ring[0]}, ${ring[1]} segments)`);
-    check(ring[2] === "3 / 10 modül tamamlandı.", `${vp.name}: path step shows progress ("${ring[2]}")`);
+    check(ring[2] === T.path3, `${vp.name}: path step shows progress ("${ring[2]}")`);
     const visible = await p.evaluate(() => [...document.querySelectorAll(".bai-ta-rv")].every((e) => e.classList.contains("is-in")));
     check(visible, `${vp.name}: all sections revealed after scrolling`);
     const done = await p.evaluate(() => document.querySelectorAll(".bai-ta-journey a.is-done").length);
@@ -76,7 +82,7 @@ async function scrollThrough(p) {
     await p.click("#bai-ta-shuffle");
     await p.waitForTimeout(200);
     const live = await p.evaluate(() => document.getElementById("bai-ta-poollive").textContent);
-    check(/30 soru/.test(live), `exam pool: shuffle announced ("${live}")`);
+    check(T.pool.test(live), `exam pool: shuffle announced ("${live}")`);
     await ctx.close();
   }
 
@@ -110,7 +116,7 @@ async function scrollThrough(p) {
       badge: document.querySelector(".bai-ac__badges .bai-ac__badge span").textContent,
     }));
     check(!st.anim && st.hidden === 0, `reduced motion: no reveal animation, all sections visible (${st.hidden} hidden)`);
-    check(st.badge === "10 Modül", `reduced motion: hero badge not animated ("${st.badge}")`);
+    check(st.badge === T.badge, `reduced motion: hero badge not animated ("${st.badge}")`);
     check(errors.length === 0, "reduced motion: no script errors");
     await ctx.close();
   }

@@ -1,23 +1,29 @@
 # Teacher Academy – Preview
 
-New sections for the Eğitmen Akademisi page (`/egitmen-akademisi`, page ID 4358). They are added
-around the existing page without changing it. The existing modules, quizzes, login, exam and
+New sections for the Eğitmen Akademisi page (`/egitmen-akademisi`, page ID 4358) and its English twin,
+Educator Academy (`/en/educator-academy`, page ID 4359). They are added around the existing page
+without changing it. The existing modules, quizzes, login, exam and
 certificate logic are carried over byte for byte. All new code is scoped under `.bai-ta`.
 
 - **Live since 15 Oct 2026 (13:13, Istanbul time):** https://biradimileri.com/egitmen-akademisi/ (page 4358, content only).
   The page before the switch is in `backup/`.
-- **Staging draft:** page ID in `staging-page.json`; preview after logging in to staging admin:
-  `https://stg15oct.biradimileri.com/?page_id=5762&preview=true`
+  Staging's page 4358 was brought up to date the same day, so staging and live match.
+  Live still runs the build from commit `490498a`. The current build differs only in that the script reads
+  its texts from per-language data; it behaves identically (the Turkish tests pass on it).
+- **English (`/en/educator-academy`):** built and tested; **not live yet**. Staging draft (log in first):
+  `https://stg15oct.biradimileri.com/?page_id=5768&preview=true`. The live page is backed up in `backup/live-4359-*`.
+- **Turkish staging draft:** `https://stg15oct.biradimileri.com/?page_id=5762&preview=true`
 
 ### Existing learners
-The new sections only **read** progress from the visitor's browser (`bai_ac_tr`). They never write it
+The new sections only **read** progress from the visitor's browser (`bai_ac_tr`, `bai_ac_en`). They never write it
 and never call the server, so learners who are midway or certified keep everything they had.
 `test/learner-safety.test.js` compares the page before and after for four learner states (0/10, 3/10,
 10/10, certified). The hub output and saved progress must be identical, and they were on the live page.
 
 ### Undo
 ```bash
-python3 teacher-academy/publish_live.py --rollback --yes   # restores backup/live-4358-content.html
+python3 teacher-academy/publish_live.py --rollback --yes             # Turkish: restores backup/live-4358-content.html
+python3 teacher-academy/publish_live.py --lang en --rollback --yes   # English (once live)
 ```
 
 ## Files
@@ -58,6 +64,21 @@ python3 teacher-academy/publish_live.py --rollback --yes   # restores backup/liv
 
 Every number comes from the existing pages, and there are no invented statistics or testimonials.
 The new sections only read progress from the visitor's browser (`bai_ac_tr`) and never write to it.
+
+## Languages
+
+Everything takes `--lang tr|en` (default `tr`): `build.py`, `publish_staging.py` and `publish_live.py`.
+The tests use `TA_LANG=en`. The markup lives in `src/sections.html` (TR) and `src/sections.en.html` (EN).
+Module data, quiz questions, anchors and interface texts for both languages are in `build.py` (`LANGS`).
+The English copy is British English, like the existing page; step texts are quoted from `/en/teach-with-us`.
+
+To take the English version live (after approval):
+```bash
+python3 teacher-academy/build.py --lang en --live
+TA_LANG=en node teacher-academy/test/learner-safety.test.js <current-page.html> <new-page.html>
+python3 teacher-academy/publish_live.py --lang en --yes
+python3 teacher-academy/publish_live.py --lang en --staging --yes   # keep staging in step
+```
 
 ## Rebuild and update the staging draft
 

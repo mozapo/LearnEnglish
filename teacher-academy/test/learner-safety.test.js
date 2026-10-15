@@ -6,18 +6,20 @@ const { chromium } = require("playwright");
 const path = require("path");
 
 const [currentFile, newFile] = process.argv.slice(2).map((f) => path.resolve(f));
+const LANG = process.env.TA_LANG || "tr"; // TA_LANG=en for /en/educator-academy
+const KEY = "bai_ac_" + LANG;
 const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined;
 let failures = 0;
 const sorted = (o) => JSON.stringify(Object.keys(o).sort().map((k) => [k, o[k]]));
 const check = (ok, msg) => { console.log((ok ? "PASS " : "FAIL ") + msg); if (!ok) failures++; };
 
 const all = (n) => Object.fromEntries(Array.from({ length: n }, (_, i) => [String(i + 1), { done: 1, score: 5, ts: 1760000000000 }]));
-const timers = (n) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`bai_ac_t_tr_${i + 1}`, "900"]));
+const timers = (n) => Object.fromEntries(Array.from({ length: n }, (_, i) => [`bai_ac_t_${LANG}_${i + 1}`, "900"]));
 const STATES = {
   "new visitor (0/10)": {},
-  "in progress (3/10)": { bai_ac_tr: { m: all(3), tk: { 1: [0, 1] } }, ...timers(3) },
-  "all modules done, no certificate (10/10)": { bai_ac_tr: { m: all(10), tk: {} }, ...timers(10) },
-  "certified (10/10 + certificate)": { bai_ac_tr: { m: all(10), tk: {}, cert: { code: "BAI-TEST-1234", name: "Test Eğitmen", date: "2026-10-01", score: 27 } }, ...timers(10) },
+  "in progress (3/10)": { [KEY]: { m: all(3), tk: { 1: [0, 1] } }, ...timers(3) },
+  "all modules done, no certificate (10/10)": { [KEY]: { m: all(10), tk: {} }, ...timers(10) },
+  "certified (10/10 + certificate)": { [KEY]: { m: all(10), tk: {}, cert: { code: "BAI-TEST-1234", name: "Test Eğitmen", date: "2026-10-01", score: 27 } }, ...timers(10) },
 };
 
 async function snapshot(browser, file, state) {
