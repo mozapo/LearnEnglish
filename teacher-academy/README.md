@@ -10,8 +10,9 @@ certificate logic are carried over byte for byte. All new code is scoped under `
   Staging's page 4358 was brought up to date the same day, so staging and live match.
   Live still runs the build from commit `490498a`. The current build differs only in that the script reads
   its texts from per-language data; it behaves identically (the Turkish tests pass on it).
-- **English (`/en/educator-academy`):** built and tested; **not live yet**. Staging draft (log in first):
-  `https://stg15oct.biradimileri.com/?page_id=5768&preview=true`. The live page is backed up in `backup/live-4359-*`.
+- **English live since 15 Oct 2026 (13:46, Istanbul time):** https://biradimileri.com/en/educator-academy/
+  (page 4359, content only). The page before the switch is in `backup/live-4359-*`. Staging's page 4359 matches.
+  Draft for future changes (log in first): `https://stg15oct.biradimileri.com/?page_id=5768&preview=true`
 - **Turkish staging draft:** `https://stg15oct.biradimileri.com/?page_id=5762&preview=true`
 
 ### Existing learners
@@ -23,7 +24,7 @@ and never call the server, so learners who are midway or certified keep everythi
 ### Undo
 ```bash
 python3 teacher-academy/publish_live.py --rollback --yes             # Turkish: restores backup/live-4358-content.html
-python3 teacher-academy/publish_live.py --lang en --rollback --yes   # English (once live)
+python3 teacher-academy/publish_live.py --lang en --rollback --yes   # English: restores backup/live-4359-content.html
 ```
 
 ## Files
