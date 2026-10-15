@@ -51,7 +51,7 @@
     <div id="bai-ta-qresult" hidden>
       <h3 id="bai-ta-rtitle" tabindex="-1">Senin için öne çıkan iki modül</h3>
       <div class="bai-ta-rcards" id="bai-ta-rcards"></div>
-      <p class="bai-ta-note">Modüller sırayla açılır. Bu iki modüle, yolculuğa Modül 1'den başlayarak ulaşırsın; her biri bir öncekinin üzerine kurulur.</p>
+      <p class="bai-ta-note">Modüller sırayla açılır: yolculuk Modül 1 ile başlar ve her modül bir öncekinin üzerine kurulur.</p>
       <div class="bai-ta-btns">
         <a class="bai-ta-btn bai-ta-cta-mirror" href="/egitmen-akademisi/modul-1-ogrenen-kim/">Programa başla</a>
         <button type="button" class="bai-ta-btn bai-ta-btn--ghost" id="bai-ta-qagain">Yeniden yap</button>
@@ -88,11 +88,11 @@
 <section class="bai-ta bai-ta-sec bai-ta-rv" id="bai-ta-time" aria-labelledby="bai-ta-tm-h">
   <p class="bai-ta-eyebrow">Zaman</p>
   <h2 id="bai-ta-tm-h">Ne kadar zaman ayırmalısın?</h2>
-  <p>Modüllerin okuma süresi 14 ile 18 dakika arasında. Testler ve kendi temponla birlikte toplamda yaklaşık üç saat ayırman yeterli olur; acele etmen gerekmez, ilerlemen tarayıcında saklanır.</p>
-  <ul class="bai-ta-chart" aria-label="Modüllere göre okuma süresi">
+  <p>Her modülün tahmini okuma süresi 14 ile 18 dakika arasında. Testlerle ve kendi temponla birlikte programın tamamı yaklaşık üç saat sürer; acele etmen gerekmez, ilerlemen tarayıcında saklanır.</p>
+  <ul class="bai-ta-chart" aria-label="Modüllere göre tahmini okuma süresi">
     {{MINUTE_ROWS}}
   </ul>
-  <p class="bai-ta-chart__total"><span>Toplam okuma</span><b>161 dk</b></p>
+  <p class="bai-ta-chart__total"><span>Testler ve kendi temponla birlikte</span><b>~3 saat</b></p>
 </section>
 
 <!-- @section exam -->
@@ -103,7 +103,7 @@
     <figure class="bai-ta-card bai-ta-pool">
       <div class="bai-ta-pool__grid" id="bai-ta-pool" aria-hidden="true">{{POOL_CELLS}}</div>
       <figcaption><b>64 soruluk havuz</b><span>Her denemede rastgele 30 soru seçilir.</span></figcaption>
-      <button type="button" class="bai-ta-link bai-ta-jsonly" id="bai-ta-shuffle">Başka bir soru kâğıdı çek</button>
+      <button type="button" class="bai-ta-link bai-ta-jsonly" id="bai-ta-shuffle">Başka bir soru kâğıdı çek</button><span class="bai-ta-sr" id="bai-ta-poollive" aria-live="polite"></span>
     </figure>
     <figure class="bai-ta-card bai-ta-gauge">
       <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="bai-ta-gauge__bg" cx="60" cy="60" r="48"/><circle class="bai-ta-gauge__fg" cx="60" cy="60" r="48" pathLength="100"/></svg>

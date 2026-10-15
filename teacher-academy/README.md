@@ -32,7 +32,8 @@ certificate logic are carried over byte for byte. All new code is scoped under `
    Nothing is stored or sent.
 5. **Roadmap.** A 10-segment ring showing the visitor's real module progress, plus a line that
    draws itself through the stops: modules → module quizzes → exam → certificate → interview.
-6. **Time chart.** Reading minutes per module (14–18, 161 in total).
+6. **Time chart.** Estimated reading minutes per module (14–18), with "~3 saat" in total including quizzes and
+   your own pace. This matches the page's FAQ, which says about three hours.
 7. **Exam at a glance.** A 64-question pool with 30 drawn at random (try "Başka bir soru kâğıdı
    çek"), an 80% gauge (24 of 30) and a note that retakes are unlimited.
 8. **Path to the team.** The four steps from `/ekibimize-katil`, with the academy as step 3

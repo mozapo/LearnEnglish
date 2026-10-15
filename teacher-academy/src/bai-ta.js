@@ -175,7 +175,7 @@
     }
     draw();
     var b = $("bai-ta-shuffle");
-    if(b){ b.addEventListener("click", draw); }
+    if(b){ b.addEventListener("click", function(){ draw(); var lv = $("bai-ta-poollive"); if(lv){ lv.textContent = ""; window.setTimeout(function(){ lv.textContent = "Yeni bir soru kâğıdı: 64 sorudan rastgele 30 soru seçildi."; }, 60); } }); }
   }
 
   function boot(){

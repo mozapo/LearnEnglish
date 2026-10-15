@@ -16,7 +16,7 @@ HERE = Path(__file__).resolve().parent
 ORIGINAL = HERE / "original" / "egitmen-akademisi-4358.html"
 OUT = HERE / "dist" / "teacher-academy-preview.html"
 
-# Module titles, ledes and read times are copied from the live module pages.
+# Module titles, read times and ledes come from the live module pages (ledes quoted, some cut to their first sentences).
 MODS = [
     (1, "Öğrenen Kim?", 14, "modul-1-ogrenen-kim",
      "İyi öğretmenin başladığı yer konu değil, karşındaki insandır. Bu modül, ilk dersten önce ve ilk dersin içinde öğrenenini nasıl gerçekten tanıyacağını anlatır."),
@@ -31,13 +31,13 @@ MODS = [
     (6, "Geri Bildirim ve Değerlendirme", 15, "modul-6-geri-bildirim-ve-degerlendirme",
      "Geri bildirimin amacı yapılmış işi puanlamak değil, bir sonraki işi daha iyi yapabilmeyi sağlamaktır."),
     (7, "Zor Anlar", 17, "modul-7-zor-anlar",
-     "Kapanan öğrenen, araya giren veli, duran ilerleme, ve bir öğrenenin sana zor bir şey anlattığı an."),
+     "Her eğitmenin karşılaştığı ama hiçbir müfredatın anlatmadığı anlar: kapanan öğrenen, araya giren veli, duran ilerleme, ve bir öğrenenin sana zor bir şey anlattığı an."),
     (8, "Kapsayıcılık, Etik ve Güvenlik", 16, "modul-8-kapsayicilik-etik-guvenlik",
-     "İyi öğretmenlik yalnızca etkili olmak değil, güvenli ve adil olmaktır: mesleki sınırlar, çocuk güvenliği ve veri sorumluluğu."),
+     "İyi öğretmenlik yalnızca etkili olmak değil, güvenli ve adil olmaktır. Bu modül farklı öğrenen profillerini, mesleki sınırları, çocuk güvenliğini ve veri sorumluluğunu kapsar."),
     (9, "Çevrimiçi Öğretmek", 18, "modul-9-cevrimici-ogretmek",
      "Çevrimiçi ders, ekrana taşınmış yüz yüze ders değildir: bakış, dikkat, ortam ve güven burada başka kurallarla çalışır."),
     (10, "Profesyonellik ve İş Ahlakı", 17, "modul-10-profesyonellik-ve-is-ahlaki",
-     "Zamanında gelmek, hazırlıklı olmak, sözünü tutmak ve hata yaptığında sahiplenmek de mesleğin parçasıdır."),
+     "Bir eğitmenin kalitesi yalnızca ders içindeki bilgisiyle ölçülmez. Zamanında gelmek, hazırlıklı olmak, sözünü tutmak, hata yaptığında sahiplenmek ve her öğrenene aynı özenle davranmak da mesleğin parçasıdır."),
 ]
 
 # Self-reflection quiz. "m" lists the modules an answer points to; the first one weighs double.
@@ -47,10 +47,10 @@ QUIZ = [
         {"t": "Öğrendiklerini nasıl kalıcı hâle getireceğini", "m": [2]},
         {"t": "Kırk dakikayı nasıl bir akışla kuracağımı", "m": [3]},
         {"t": "Kendini rahat ve güvende hissedip hissetmediğini", "m": [4]}]},
-    {"q": "Hangisi sana daha zor gelir?", "o": [
+    {"q": "Hangisi sana en zor gelir?", "o": [
         {"t": "Aynı konuyu yedi yaşındaki bir çocuğa ve bir yetişkine anlatmak", "m": [5]},
         {"t": "Hatayı düzeltirken öğrenenin hevesini kırmamak", "m": [6, 4]},
-        {"t": "Ders ortasında kapanan ya da zorlanan bir öğrenenle kalmak", "m": [7]},
+        {"t": "Ders ortasında kapanan ya da zorlanan bir öğrenenle ne yapacağını bilmek", "m": [7]},
         {"t": "Ekran başında dikkati ve teması canlı tutmak", "m": [9]}]},
     {"q": "Bir öğrenenin ilerlemesi durdu. İlk adımın ne olur?", "o": [
         {"t": "Nasıl çalıştığını ve neyi nasıl tekrar ettiğini incelerim", "m": [2]},
@@ -124,9 +124,9 @@ def json_for_script(obj):
     return s.replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
 
-def check_wp_safe(name, s):
+def check_wp_safe(name, s, is_js=False):
     """WordPress content filters mangle these inside inline scripts; the original avoids them too."""
-    bad = [t for t in ("&&", "\n", "//") if t in s]
+    bad = [t for t in ("&&", "\n") + (("//",) if is_js else ()) if t in s]
     if re.search(r"<[A-Za-z/!]", s):
         bad.append("<tag-like")
     if bad:
@@ -159,7 +159,7 @@ def main():
                  for n, t, mins, slug, d in MODS],
         "quiz": QUIZ,
     })
-    check_wp_safe("bai-ta.js", js)
+    check_wp_safe("bai-ta.js", js, is_js=True)
     check_wp_safe("bai-ta-data", data)
 
     first_style_end = html.index("</style>") + len("</style>")

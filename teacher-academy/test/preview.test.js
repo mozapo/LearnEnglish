@@ -62,6 +62,22 @@ async function scrollThrough(p) {
     await ctx.close();
   }
 
+  // Journey links land below the sticky bar; shuffle is announced to screen readers
+  {
+    const { ctx, p } = await open(browser, { viewport: { width: 390, height: 844 }, reducedMotion: "reduce" });
+    await p.evaluate(() => window.scrollTo(0, document.getElementById("bai-ta-ch1").offsetTop + 50));
+    // Same scroll an anchor jump makes (clicking is avoided: the local copy's <base> tag sends #links to staging).
+    await p.evaluate(() => document.getElementById(document.querySelector('.bai-ta-journey a[data-ch="3"]').getAttribute("href").slice(1)).scrollIntoView());
+    await p.waitForTimeout(400);
+    const pos = await p.evaluate(() => ({ bar: document.getElementById("bai-ta-journey").getBoundingClientRect().bottom, sec: document.getElementById("bai-ta-ch3").getBoundingClientRect().top }));
+    check(pos.sec >= pos.bar - 1, `journey link: section starts below the sticky bar (bar ${Math.round(pos.bar)}px, section ${Math.round(pos.sec)}px)`);
+    await p.click("#bai-ta-shuffle");
+    await p.waitForTimeout(200);
+    const live = await p.evaluate(() => document.getElementById("bai-ta-poollive").textContent);
+    check(/30 soru/.test(live), `exam pool: shuffle announced ("${live}")`);
+    await ctx.close();
+  }
+
   // Keyboard-only quiz run
   {
     const { ctx, p, errors } = await open(browser, { viewport: { width: 390, height: 844 } });

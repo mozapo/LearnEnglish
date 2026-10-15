@@ -36,9 +36,14 @@ site itself through the WordPress REST API, not in local code.
 
 - **Stack:** WordPress (tr_TR, Europe/Istanbul) on Hostinger with LiteSpeed Cache. Theme: **Astra** with the child theme
   `bai-astra-child` (v1.0.18).
-- **Page builders:** mixed. About **69 published pages use Elementor** (home, all service detail pages, teacher listings,
-  FAQ, `/hikayemiz`, `/nasil-calisir`, `/en`). About **123 use Gutenberg blocks** (legal pages, `/ucretler`, `/hakkimizda`,
-  `/kocluk`, `/yaratici-atolyeler`, `/programlar/*`, Eğitmen Akademisi).
+- **Page builders:** three kinds (published pages on live, Oct 2026):
+  - **72 Elementor**: home, all service detail pages, teacher listings, FAQ, `/hikayemiz`, `/nasil-calisir`, `/en`.
+  - **88 Gutenberg blocks**: legal pages, `/ucretler`, `/hakkimizda`, `/kocluk`, `/yaratici-atolyeler`, `/programlar/*`.
+  - **31 hand-coded HTML in classic `post_content`**: all Eğitmen Akademisi / Educator Academy pages (TR and EN),
+    and `/sozlesmelerim`. One minified block each, with its own `<style>`/`<script>` (prefix `bai-ac`).
+- **Hand-coded HTML pages:** keep them on one line (wpautop turns line breaks into `<p>`/`<br>`). In inline scripts avoid
+  `&&`, `//` comments and tag-like `<` in strings (write `\x3C`). Do not open them in the visual editor; it breaks the scripts.
+  Progress for the academy lives in the visitor's browser under `bai_ac_tr` / `bai_ac_en`.
 - **Key plugins:** WooCommerce (21 products = the price list), Tutor LMS (no courses yet), FluentCRM, SureForms, SureMail,
   SureRank SEO, SureCookie, Uncanny Automator, AI Engine, WPCode Lite, Limit Login Attempts.
   **Custom plugins:** *BAI İş Bankası Sanal POS* (payments), *Bir Adım İleri — Ders Planlama* (lesson scheduling and the

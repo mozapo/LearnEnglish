@@ -3,8 +3,9 @@
 .bai-ta{--g:#B98A2E;--gl:#E7C77E;--og:#1A1206;--navy:#16233F;--ink:#E8EDF7;--mut:#A6B6D0;--line:rgba(232,237,247,.14);--wash:rgba(255,255,255,.045);--wash2:rgba(255,255,255,.07);--e:cubic-bezier(.22,.61,.36,1);color:var(--ink)}
 .bai-ta *{box-sizing:border-box}
 .bai-ta [hidden]{display:none!important}
+.bai-ta-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .bai-ac.no-js .bai-ta-jsonly{display:none!important}
-.bai-ta-sec{margin:0 0 46px}
+.bai-ta-sec{margin:0 0 46px;scroll-margin-top:calc(var(--wp-admin--admin-bar--height,0px) + 84px)}
 .bai-ta h2{font-size:clamp(1.45rem,3vw,1.95rem);line-height:1.2;margin:0 0 12px}
 .bai-ta h3{font-size:1.08rem;line-height:1.3;margin:0 0 4px}
 .bai-ta p{line-height:1.65;margin:0 0 14px}
@@ -115,7 +116,7 @@
 .bai-ta-anim .bai-ta-rv .bai-ta-chart__bar i{transform:scaleX(0)}
 .bai-ta-anim .bai-ta-rv.is-in .bai-ta-chart__bar i{transform:none;transition-delay:calc(var(--i)*60ms)}
 .bai-ta-chart__total{display:flex;justify-content:space-between;align-items:baseline;margin:14px 0 0!important;padding-top:12px;border-top:1px solid var(--line);color:var(--mut)}
-.bai-ta-chart__total b{font-family:"Fraunces",ui-serif,Georgia,serif;font-size:1.5rem;color:#fff}
+.bai-ta-chart__total b{font-family:"Fraunces",ui-serif,Georgia,serif;font-size:1.5rem;color:#fff;white-space:nowrap}
 
 /* Exam at a glance */
 .bai-ta-exam{display:grid;gap:14px;margin:20px 0 0}
