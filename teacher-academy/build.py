@@ -4,7 +4,8 @@
 Takes the untouched hub HTML in original/ and inserts the new .bai-ta sections, CSS and JS at
 fixed anchors. Output: dist/teacher-academy-preview.html, ready to be used as page content.
 
-Usage: python3 teacher-academy/build.py
+Usage: python3 teacher-academy/build.py                 # staging preview (original/ from staging)
+       python3 teacher-academy/build.py --live          # live version, built on the live page content
 """
 import json
 import math
@@ -13,8 +14,9 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ORIGINAL = HERE / "original" / "egitmen-akademisi-4358.html"
-OUT = HERE / "dist" / "teacher-academy-preview.html"
+LIVE = "--live" in sys.argv
+ORIGINAL = HERE / "original" / ("egitmen-akademisi-4358-live.html" if LIVE else "egitmen-akademisi-4358.html")
+OUT = HERE / "dist" / ("teacher-academy-live.html" if LIVE else "teacher-academy-preview.html")
 
 # Module titles, read times and ledes come from the live module pages (ledes quoted, some cut to their first sentences).
 MODS = [
