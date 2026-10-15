@@ -12,6 +12,11 @@
  * do not count, so deleting an application lets that person apply again.
  *
  * Fails open: if the entries table cannot be read, the application goes through.
+ *
+ * Written without ampersands, angle brackets or backslashes on purpose: the tool that
+ * installs it over the API runs the code through the HTML filter, which would escape them.
+ * So: "and" instead of the double ampersand, call_user_func() instead of the object arrow,
+ * array keys set one by one, and a plain-text message.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -29,8 +34,9 @@ if ( ! function_exists( 'bai_ja_norm_email' ) ) {
 	}
 
 	function bai_ja_norm_phone( $value ) {
-		$digits = preg_replace( '/\D+/', '', (string) $value );
-		return strlen( $digits ) >= 10 ? substr( $digits, -10 ) : '';
+		$digits = preg_replace( '/[^0-9]+/', '', (string) $value );
+		// isset( $digits[9] ): at least 10 digits.
+		return isset( $digits[9] ) ? substr( $digits, -10 ) : '';
 	}
 
 	/**
@@ -38,16 +44,18 @@ if ( ! function_exists( 'bai_ja_norm_email' ) ) {
 	 * field names (srfm-email-eposta-…, srfm-number-telefon-…-phone).
 	 */
 	function bai_ja_contact( $fields ) {
-		$email = '';
-		$phone = '';
-		foreach ( (array) $fields as $key => $value ) {
+		$fields = (array) $fields;
+		$email  = '';
+		$phone  = '';
+		foreach ( array_keys( $fields ) as $key ) {
+			$value = $fields[ $key ];
 			if ( ! is_scalar( $value ) ) {
 				continue;
 			}
 			$key = strtolower( (string) $key );
-			if ( '' === $email && false !== strpos( $key, 'email' ) && false === strpos( $key, 'confirm' ) && false === strpos( $key, 'sender' ) ) {
+			if ( '' === $email and false !== strpos( $key, 'email' ) and false === strpos( $key, 'confirm' ) and false === strpos( $key, 'sender' ) ) {
 				$email = bai_ja_norm_email( $value );
-			} elseif ( '' === $phone && ( false !== strpos( $key, 'telefon' ) || false !== strpos( $key, 'phone' ) ) ) {
+			} elseif ( '' === $phone and ( false !== strpos( $key, 'telefon' ) || false !== strpos( $key, 'phone' ) ) ) {
 				$phone = bai_ja_norm_phone( $value );
 			}
 		}
@@ -55,30 +63,29 @@ if ( ! function_exists( 'bai_ja_norm_email' ) ) {
 	}
 
 	function bai_ja_is_same_person( $a, $b ) {
-		return ( '' !== $a[0] && $a[0] === $b[0] ) || ( '' !== $a[1] && $a[1] === $b[1] );
+		return ( '' !== $a[0] and $a[0] === $b[0] ) || ( '' !== $a[1] and $a[1] === $b[1] );
+	}
+
+	function bai_ja_db( $method, ...$args ) {
+		return call_user_func_array( array( $GLOBALS['wpdb'], $method ), $args );
 	}
 
 	/** True when an earlier application in the window matches, false otherwise or on error. */
 	function bai_ja_has_recent_application( $contact ) {
-		global $wpdb;
-		$table = $wpdb->prefix . 'srfm_entries';
-		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
+		$table = $GLOBALS['table_prefix'] . 'srfm_entries';
+		if ( bai_ja_db( 'get_var', bai_ja_db( 'prepare', 'SHOW TABLES LIKE %s', $table ) ) !== $table ) {
 			return false;
 		}
 		$ids   = implode( ',', array_map( 'absint', BAI_JA_FORM_IDS ) );
 		$since = gmdate( 'Y-m-d H:i:s', strtotime( current_time( 'mysql' ) . ' -' . BAI_JA_WINDOW_DAYS . ' days' ) );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $table and $ids are built above from constants.
-		$rows = $wpdb->get_col( $wpdb->prepare( "SELECT form_data FROM {$table} WHERE form_id IN ({$ids}) AND status <> 'trash' AND created_at >= %s", $since ) );
-		if ( $wpdb->last_error ) {
-			error_log( 'bai-job-application: entries lookup failed: ' . $wpdb->last_error );
-			return false;
-		}
+		// $table and $ids are built above from constants.
+		$rows = bai_ja_db( 'get_col', bai_ja_db( 'prepare', "SELECT form_data FROM {$table} WHERE form_id IN ({$ids}) AND status != 'trash' AND created_at BETWEEN %s AND '9999-12-31'", $since ) );
 		foreach ( (array) $rows as $raw ) {
 			$data = json_decode( (string) $raw, true );
 			if ( ! is_array( $data ) ) {
 				$data = maybe_unserialize( $raw );
 			}
-			if ( is_array( $data ) && bai_ja_is_same_person( $contact, bai_ja_contact( $data ) ) ) {
+			if ( is_array( $data ) and bai_ja_is_same_person( $contact, bai_ja_contact( $data ) ) ) {
 				return true;
 			}
 		}
@@ -89,29 +96,27 @@ if ( ! function_exists( 'bai_ja_norm_email' ) ) {
 add_filter(
 	'rest_pre_dispatch',
 	function ( $result, $server, $request ) {
-		if ( null !== $result || '/sureforms/v1/submit-form' !== $request->get_route() ) {
+		if ( null !== $result || '/sureforms/v1/submit-form' !== call_user_func( array( $request, 'get_route' ) ) ) {
 			return $result;
 		}
-		$form_id = absint( $request->get_param( 'form-id' ) );
+		$params  = call_user_func( array( $request, 'get_params' ) );
+		$form_id = isset( $params['form-id'] ) ? absint( $params['form-id'] ) : 0;
 		if ( ! in_array( $form_id, BAI_JA_FORM_IDS, true ) ) {
 			return $result;
 		}
-		$contact = bai_ja_contact( $request->get_params() );
-		if ( ( '' === $contact[0] && '' === $contact[1] ) || ! bai_ja_has_recent_application( $contact ) ) {
+		$contact = bai_ja_contact( $params );
+		if ( ( '' === $contact[0] and '' === $contact[1] ) || ! bai_ja_has_recent_application( $contact ) ) {
 			return $result;
 		}
 
-		$message = in_array( $form_id, BAI_JA_EN_FORM_IDS, true )
-			? 'We have already received an application with this e-mail address or phone number in the last 12 months. If you would like to update your application, please write to us through our <a href="' . esc_url( home_url( '/en/contact/' ) ) . '">contact page</a>.'
-			: 'Bu e-posta adresi veya telefon numarasıyla son 12 ay içinde bir başvuru aldık. Başvurunuzu güncellemek isterseniz bize <a href="' . esc_url( home_url( '/iletisim/' ) ) . '">İletişim sayfasından</a> yazabilirsiniz.';
-
-		return new WP_REST_Response(
-			array(
-				'success' => false,
-				'data'    => array( 'message' => $message ),
-			),
-			409
-		);
+		$data            = array();
+		$data['message'] = in_array( $form_id, BAI_JA_EN_FORM_IDS, true )
+			? 'We have already received an application with this e-mail address or phone number in the last 12 months. If you would like to update your application, please write to us through our contact page: biradimileri.com/en/contact'
+			: 'Bu e-posta adresi veya telefon numarasıyla son 12 ay içinde bir başvuru aldık. Başvurunuzu güncellemek isterseniz bize İletişim sayfasından yazabilirsiniz: biradimileri.com/iletisim';
+		$body            = array();
+		$body['success'] = false;
+		$body['data']    = $data;
+		return new WP_REST_Response( $body, 409 );
 	},
 	10,
 	3

@@ -16,10 +16,11 @@ class FakeDB {
 	public $prefix = 'wp_'; public $last_error = ''; public $rows = array(); public $sql = '';
 	function prepare( $q, ...$a ) { return vsprintf( str_replace( '%s', "'%s'", $q ), $a ); }
 	function get_var( $q ) { return 'wp_srfm_entries'; }
-	function get_col( $q ) { $this->sql = $q; preg_match( "/created_at >= '([^']+)'/", $q, $m );
+	function get_col( $q ) { $this->sql = $q; preg_match( "/created_at BETWEEN '([^']+)'/", $q, $m );
 		return array_column( array_filter( $this->rows, fn( $r ) => 'trash' !== $r['status'] && $r['created_at'] >= $m[1] ), 'form_data' ); }
 }
 $wpdb = new FakeDB();
+$table_prefix = 'wp_';
 require __DIR__ . '/../bai-job-application-once-a-year.php';
 $f = $GLOBALS['filters']['rest_pre_dispatch'];
 
@@ -60,4 +61,8 @@ $r = $f( null, null, new Req( '/wp/v2/pages', array() ) );
 printf( "%s  other routes pass through\n", null === $r ? 'ok  ' : 'FAIL' ); $fail += null !== $r;
 $en = submit( 5609, 'ayse@example.com', '' )->data['data']['message'];
 printf( "%s  English message on English form\n", str_starts_with( $en, 'We have' ) ? 'ok  ' : 'FAIL' );
+// The installer HTML-escapes these characters, so the snippet body must not contain them.
+$body = preg_replace( '/^<\?php\s*/', '', file_get_contents( __DIR__ . '/../bai-job-application-once-a-year.php' ) );
+$bad  = preg_match( '/[&<>\\\\]/', $body );
+printf( "%s  no & < > or backslash in the snippet body\n", $bad ? 'FAIL' : 'ok  ' ); $fail += $bad;
 exit( $fail ? 1 : 0 );
