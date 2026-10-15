@@ -1,9 +1,9 @@
 // Renders the built preview inside a saved copy of the staging page and checks the new sections.
-// Usage: node teacher-academy/test/preview.test.js <page.html> <screenshot-dir>
+// Usage: node teacher-academy/test/preview.test.js <page.html | https://url> <screenshot-dir>
 const { chromium } = require("playwright");
 const path = require("path");
 
-const page_file = path.resolve(process.argv[2]);
+const target = /^https?:/.test(process.argv[2]) ? process.argv[2] : "file://" + path.resolve(process.argv[2]);
 const shots = path.resolve(process.argv[3] || ".");
 const proxy = process.env.HTTPS_PROXY ? { server: process.env.HTTPS_PROXY } : undefined;
 let failures = 0;
@@ -18,7 +18,9 @@ async function open(browser, opts) {
   if (opts.progress) {
     await p.addInitScript((st) => { try { localStorage.setItem("bai_ac_tr", JSON.stringify(st)); } catch (e) {} }, opts.progress);
   }
-  await p.goto("file://" + page_file, { waitUntil: "load", timeout: 90000 });
+  // Never write to a real site from a test: block every non-GET request to WordPress.
+  await ctx.route(/\/wp-json\/|admin-ajax\.php/, (r) => (r.request().method() === "GET" ? r.continue() : r.abort()));
+  await p.goto(target, { waitUntil: "load", timeout: 90000 });
   await p.waitForTimeout(800);
   const reject = await p.$("text=Yalnızca Gerekli");
   if (reject) { await reject.click().catch(() => {}); await p.waitForTimeout(300); }

@@ -4,9 +4,21 @@ New sections for the Eğitmen Akademisi page (`/egitmen-akademisi`, page ID 4358
 around the existing page without changing it. The existing modules, quizzes, login, exam and
 certificate logic are carried over byte for byte. All new code is scoped under `.bai-ta`.
 
-- **Staging draft:** page ID in `staging-page.json`. Preview it after logging in to staging admin:
+- **Live since 15 Oct 2026 (13:13, Istanbul time):** https://biradimileri.com/egitmen-akademisi/ (page 4358, content only).
+  The page before the switch is in `backup/`.
+- **Staging draft:** page ID in `staging-page.json`; preview after logging in to staging admin:
   `https://stg15oct.biradimileri.com/?page_id=5762&preview=true`
-- **Live:** nothing has been changed.
+
+### Existing learners
+The new sections only **read** progress from the visitor's browser (`bai_ac_tr`). They never write it
+and never call the server, so learners who are midway or certified keep everything they had.
+`test/learner-safety.test.js` compares the page before and after for four learner states (0/10, 3/10,
+10/10, certified). The hub output and saved progress must be identical, and they were on the live page.
+
+### Undo
+```bash
+python3 teacher-academy/publish_live.py --rollback --yes   # restores backup/live-4358-content.html
+```
 
 ## Files
 
@@ -19,6 +31,9 @@ certificate logic are carried over byte for byte. All new code is scoped under `
 | `build.py` | Inserts the new sections into the original page; quiz and module data live here |
 | `dist/teacher-academy-preview.html` | Built page content, ready to paste |
 | `publish_staging.py` | Creates or updates the **draft** on **staging** only |
+| `publish_live.py` | Replaces only the content of live page 4358, with guards and `--rollback` |
+| `backup/` | The live page content and settings before the switch |
+| `test/learner-safety.test.js` | Before/after comparison for learners at every stage |
 | `test/preview.test.js` | Browser checks: 320/390/1280 px, keyboard quiz, reduced motion, contrast |
 
 ## What was added
@@ -51,27 +66,14 @@ python3 teacher-academy/build.py              # checks that the original markup 
 python3 teacher-academy/publish_staging.py    # draft only, staging only, verifies the result
 ```
 
-## Moving it to the live site (when you are happy)
+## Updating live later
+
+1. Change `src/`, then run `python3 teacher-academy/build.py`, update the staging draft and check it.
+2. Refresh `backup/` and `original/egitmen-akademisi-4358-live.html` from the live page, then run `build.py --live`.
+3. Run `test/learner-safety.test.js` (the current live page vs the new one).
+4. With approval: `python3 teacher-academy/publish_live.py --yes`. LiteSpeed purges the page automatically on save.
 
 **Never use Hostinger's "Publish staging".** It copies the whole staging site over the live site.
 
-**Easiest:** tell Claude "move the Teacher Academy preview to live". Claude will then:
-
-1. Snapshot the **live** `/egitmen-akademisi` content as a backup in `original/`. The live page
-   may differ from staging, and its search-engine data must keep live URLs.
-2. Rebuild on top of that live content and show you the diff.
-3. Replace only the content of live page 4358, check what WordPress actually outputs, and purge
-   LiteSpeed Cache.
-
-To undo, put the backup content back.
-
-**By hand:**
-
-1. On the **live** site, open Pages → Eğitmen Akademisi → ⋮ → Code editor. Copy everything into a
-   text file as a backup.
-2. Rebuild against the live content: replace `original/egitmen-akademisi-4358.html` with that
-   backup and run `python3 teacher-academy/build.py`.
-3. Paste `dist/teacher-academy-preview.html` into the Code editor in place of the old content and
-   click **Update**. Do not switch to the visual editor: it can break the scripts.
-4. LiteSpeed Cache → Purge All, then check the page on a phone and a computer.
-5. To undo, paste the backup back in and click Update.
+Testing the live URL directly in a headless browser hits Hostinger's bot check. Fetch the page with curl
+and test the saved HTML instead.
