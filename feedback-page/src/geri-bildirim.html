@@ -7,7 +7,33 @@
      Promises on this page (owner decision 2026-10-15): receipt confirmed within 1 business day, written reply within 2 business days,
      safety reports handled the same day; the expert concerned does not review the complaint; escalation to the founder; anonymous is optional.
      Legal pages that point here: Ön Bilgilendirme Formu §8, İptal ve İade §7, Çocuk Güvenliği Politikası §8, KVKK Aydınlatma Metni (retention table). -->
-<div class="bai-v2" data-accent="gold">
+<div class="bai-v2 bai-gb" data-accent="gold">
+<style>
+/* Two one-time micro-animations, CSS only, scoped to .bai-gb.
+   1. Arrival: the box a visitor jumps to (#guvenlik, #geri-bildirim-formu) glows gold once, so they see where they landed.
+      bai-motion.js cancels the native anchor jump (smooth scroll), so :target never matches; the script below adds .bai-gb-arrive.
+   2. Sent: when SureForms fills the success message, a gold check pops in above it, so they see it arrived. */
+.bai-gb .bai-panel.bai-gb-arrive { animation: baiGbArrive 1.6s cubic-bezier(.2, .7, .2, 1) .6s backwards; }
+@keyframes baiGbArrive {
+  0% { outline: 2px solid rgba(231, 199, 126, 0); outline-offset: 2px; }
+  30% { outline: 2px solid rgba(231, 199, 126, .85); outline-offset: 6px; }
+  100% { outline: 2px solid rgba(231, 199, 126, 0); outline-offset: 14px; }
+}
+.bai-gb .srfm-success-box-description:not(:empty) { animation: baiGbRise .6s cubic-bezier(.2, .7, .2, 1) .15s backwards; }
+.bai-gb .srfm-success-box-description:not(:empty)::before {
+  content: ""; display: block; width: 48px; height: 48px; margin: 0 0 1rem; border-radius: 50%;
+  border: 2px solid var(--acc, #B98A2E);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E7C77E' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 12.5l4 4 8-9'/%3E%3C/svg%3E") center / 26px no-repeat;
+  animation: baiGbPop .55s cubic-bezier(.34, 1.4, .64, 1) backwards;
+}
+@keyframes baiGbRise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes baiGbPop { from { opacity: 0; transform: scale(.6); } }
+@media (prefers-reduced-motion: reduce) {
+  .bai-gb .bai-panel.bai-gb-arrive,
+  .bai-gb .srfm-success-box-description:not(:empty),
+  .bai-gb .srfm-success-box-description:not(:empty)::before { animation: none; }
+}
+</style>
 
   <header class="bai-hero">
     <div class="bai-container">
@@ -148,5 +174,28 @@
   </section>
 
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Şikâyetimi uzmanım görecek mi?","acceptedAnswer":{"@type":"Answer","text":"Hayır. Bildirimin koordinasyon ekibine gelir ve ilgili uzman incelemeye katılmaz. Uzmanın açıklamasını almamız gerekirse, adını paylaşmadan önce seninle konuşuruz."}},{"@type":"Question","name":"İsimsiz şikâyette bulunabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. Formda adını ve iletişim bilgilerini boş bırakabilirsin. Bu durumda sana dönüş yapamayız ve bazı konuları ayrıntılı inceleyemeyebiliriz; yine de her bildirimi okur, gereken adımları atarız."}},{"@type":"Question","name":"Ne kadar sürede yanıt alırım?","acceptedAnswer":{"@type":"Answer","text":"Bildirimini aldığımızı en geç 1 iş günü içinde, ne yapacağımızı en geç 2 iş günü içinde yazılı olarak bildiririz. Güvenlik endişeleri aynı gün ele alınır. İade talebi içeren bildirimler İptal ve İade Politikası'ndaki sürelerle sonuçlandırılır."}},{"@type":"Question","name":"Uzmanımı değiştirmek için şikâyet etmem gerekir mi?","acceptedAnswer":{"@type":"Answer","text":"Hayır. Uyum sağlayamadığını düşünüyorsan ek ücret ödemeden uzman değişikliği isteyebilirsin; bunu bir şikâyet olarak kaydetmek zorunda değilsin."}},{"@type":"Question","name":"Çocuğum adına yazabilir miyim?","acceptedAnswer":{"@type":"Answer","text":"Evet. 18 yaşından küçük öğrencilerde sözleşmenin tarafı velidir ve süreç veliyle yürütülür. Öğrenci de bize doğrudan yazabilir; bu durumda veliyi de bilgilendiririz."}},{"@type":"Question","name":"Formda sağlık bilgisi paylaşmalı mıyım?","acceptedAnswer":{"@type":"Answer","text":"Hayır. Lütfen sağlık bilgisi ya da başka kişilere ait gereksiz ayrıntılar yazma. Olayı anlamamız için gereken bilgiler yeterlidir."}}]}</script>
+<script>
+(function () {
+  var root = document.querySelector('.bai-gb');
+  if (!root) { return; }
+  var ids = ['guvenlik', 'geri-bildirim-formu'];
+  function arrive(id) {
+    if (ids.indexOf(id) === -1) { return; }
+    var panel = document.querySelector('#' + id + ' .bai-panel');
+    if (!panel) { return; }
+    panel.classList.remove('bai-gb-arrive');
+    void panel.offsetWidth;
+    panel.classList.add('bai-gb-arrive');
+  }
+  root.addEventListener('click', function (ev) {
+    var a = ev.target.closest ? ev.target.closest('a[href^="#"]') : null;
+    if (a) { arrive(a.getAttribute('href').slice(1)); }
+  });
+  root.addEventListener('animationend', function (ev) {
+    if (ev.animationName === 'baiGbArrive') { ev.target.classList.remove('bai-gb-arrive'); }
+  });
+  arrive(location.hash.slice(1));
+})();
+</script>
 </div>
 <!-- /wp:html -->

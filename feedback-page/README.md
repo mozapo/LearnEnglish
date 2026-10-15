@@ -52,6 +52,12 @@ NODE_PATH=$(npm root -g) node feedback-page/test/staging.test.js "$WP_URL" /tmp/
 
 `publish.py` applies the edits to each site's own current content; it never copies staging content to live.
 
+## Micro-animations (in the page source, CSS plus a 15-line script, scoped to `.bai-gb`)
+- **Arrival:** the box a visitor jumps to (`#guvenlik`, `#geri-bildirim-formu`, also from the Çocuk Güvenliği link) gets
+  one gold ring that fades outward (1.6 s). `bai-motion.js` cancels the native anchor jump, so a small script adds `.bai-gb-arrive`.
+- **Sent:** when SureForms fills the success message, a gold check pops in and the message rises into place.
+- Both are off under `prefers-reduced-motion`. The hero panel already has the site's own stagger and line draw, so nothing was added there.
+
 ## Not automated
 - **Acknowledging receipt is manual.** The form shows a confirmation on screen, but the "received within 1 business day"
   message is sent by the team. SureForms can email the sender automatically; set that up once a test submission shows
