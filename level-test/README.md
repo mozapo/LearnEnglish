@@ -79,3 +79,29 @@ The level-test email request is intercepted in every browser test, so no email i
   Regression on live: `e2e_flow.js`, `e2e_staging.js` pass; they intercept the statistic, so tests add no records.
 - Turn it off: `python3 server/install.py staging|live --deactivate` (then Update in WPCode).
 - Read the data: `curl -u "$WP_USER:$WP_APP_PASSWORD" $WP_URL/wp-json/bai/v1/lt-stats`.
+
+## Coming back later (handover)
+
+All of this work is on the git branch **`claude/kind-edison-5cfs1o`** (the repository's default branch is a
+different one), so a new session must check out that branch first.
+
+**After ~300 tests**, paste this into a new Claude Code session on this repository:
+
+> Check out branch `claude/kind-edison-5cfs1o` and read `level-test/README.md` and `level-test/PLAN.md`.
+> Run `python3 level-test/tools/analyze_stats.py` on live, explain the results simply, propose which questions to
+> rewrite and whether the cut points should change, and do the changes on staging first.
+
+Check the count at any time: `python3 level-test/tools/analyze_stats.py` (first line shows the number of usable tests).
+
+**Later (step 2, PLAN.md §2):** results and badges stored in the student account, teacher view of mistakes.
+Prerequisite: a guardian (veli) step in the under-18 registration, which the KVKK notice already promises.
+
+**Rules for whoever continues:**
+- Edit through the scripts here (`patches.py`, `cards.py`, `legal_patches.py`, `server/lt-stats.php`), never by hand on the site;
+  `publish.py` and `server/install.py` refuse to overwrite pages or snippets changed by someone else.
+- Server code: after `server/install.py`, the owner must open snippet 4012 in WPCode and click **Update** (staging, then live).
+- Changing the test questions: also rebuild `/panel` (`publish.py --only 5402`) because the panel carries the answer key,
+  and keep 40 questions or update the `{40}` in `server/lt-stats.php` and the code format in `patches.py`.
+- Browser tests must keep intercepting `/bai/v1/level-test` (emails) and `/bai/v1/lt-stat` (statistics).
+- Known open items: test question 18 arguably has two right answers; `/deneme-sinavlari` says the 40-question test
+  covers reading (left as is at the owner's request); two test records exist on staging (ignore).
