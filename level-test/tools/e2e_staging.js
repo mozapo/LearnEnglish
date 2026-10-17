@@ -6,10 +6,10 @@ const { chromium } = require('playwright');
   const errs = []; pg.on('pageerror', e => errs.push(e.message));
   let posted = 0;
   await pg.route('**/wp-json/bai/v1/level-test', r => { posted++; r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
-  await pg.goto(process.env.WP_STAGING_URL + '/seviye-testi-40/?nocache=' + Date.now(), { waitUntil: 'domcontentloaded' });
+  await pg.goto((process.env.TARGET_URL || process.env.WP_STAGING_URL) + '/seviye-testi-40/?nocache=' + Date.now(), { waitUntil: 'load' });
   await pg.fill('#bai-lq-name', 'Test Öğrenci'); await pg.fill('#bai-lq-email', 'noreply@example.com');
   const cb = await pg.$('#bai-lq-form input[type=checkbox]'); if (cb) await cb.check();
-  await pg.click('#bai-lq-form button[type=submit]');
+  await pg.click('#bai-lq-form button[type=submit]'); await pg.waitForSelector('#bai-lq-quiz.is-on');
   const qs = await pg.evaluate(() => null);
   // answer: correct for A1-B1, wrong for B2+ (pick "I don't know")
   const key = [3,2,3,1,0,3,2,3,1,3,0,2,3,1,0,3,1,3,0,2,1];
