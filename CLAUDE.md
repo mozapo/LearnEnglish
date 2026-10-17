@@ -50,6 +50,10 @@ site itself through the WordPress REST API, not in local code.
   `/panel` lesson panel), *Bir Adım İleri — Çalışma Planları* (study plans). These register the REST namespaces `bai/v1` and
   `bai-study/v1` and the roles `bai_teacher`, `bai_educator`, `bai_coordinator`.
   Inactive: iyzico, 3CX Live Chat, Starter Templates, SureDonation.
+- **Level tests (`/seviye-testi`, `/seviye-testi-40`) and "Seviye testim" in `/panel`:** built and published from
+  `level-test/` (read `level-test/README.md` first). The anonymous answer statistics run in WPCode snippet 4012; after any
+  change to server code installed over the API, the owner must click **Update** on that snippet in WPCode, or the old
+  cached code keeps running.
 - **Front page:** `/home` (ID 923), with a 7-question "Yön Bulma" quiz that runs only in the browser. There is no posts page;
   the blog is the `/blog` page, with 1 published post so far.
 - **Footer menu ("Alt Menü (Dengeli)") is the real sitemap:**
