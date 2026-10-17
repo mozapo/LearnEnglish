@@ -106,12 +106,16 @@ function check(cond, msg) { if (!cond) { failures++; console.log('FAIL', msg); }
   // 8. expired result (older than 12 months) is dropped
   await pg.evaluate(() => { const v = JSON.parse(localStorage.getItem('bai_lt_v1')); v.saved = Date.now() - 400 * 864e5; localStorage.setItem('bai_lt_v1', JSON.stringify(v)); });
   await pg.goto(ORIGIN + '/panel/');
-  check((await pg.textContent('#seviye-testim')).includes('Henüz bir seviye testi sonucun yok'), 'result older than 12 months is removed');
+  check((await pg.$eval('#seviye-testim', e => e.hidden)) ? (await pg.evaluate(() => localStorage.getItem('bai_lt_v1'))) === null : false, 'result older than 12 months is removed (section hidden, storage cleared)');
+  // 8b. logged in, nothing stored (a teacher opening /panel): nothing shown
+  await pg.evaluate(() => localStorage.clear()); await pg.goto(ORIGIN + '/panel/');
+  check(await pg.$eval('#seviye-testim', e => e.hidden), 'logged in without any result: section hidden');
   // 9. delete button
   await pg.goto(ORIGIN + '/panel/?lt=' + c1);
   pg.once('dialog', d => d.accept());
   await pg.click('text=Sonucu bu tarayıcıdan sil');
   check((await pg.evaluate(() => localStorage.getItem('bai_lt_v1'))) === null, '"Sonucu sil" clears the browser storage');
+  check((await pg.textContent('#seviye-testim')).includes('Henüz bir seviye testi sonucun yok'), 'after deleting, the student sees a short confirmation state');
   // 10. no horizontal scroll at phone width, desktop screenshot
   await pg.goto(ORIGIN + '/panel/?lt=' + c1);
   check(await pg.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'no horizontal scroll at 390px');

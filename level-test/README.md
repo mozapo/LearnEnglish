@@ -2,12 +2,15 @@
 
 The two free English level tests on biradimileri.com, the placement rule, and the "Seviye testim" practice area.
 
+**Status: everything below is live on biradimileri.com since 17 Oct 2026 (13:18 Istanbul time), and staging matches.**
+Verified on live with `tools/e2e_flow.js` and `tools/e2e_staging.js` (results email intercepted).
+
 | Page | ID | What changed |
 |---|---|---|
-| `/seviye-testi-40` | 4011 | Milestones + badge (**live since 17 Oct**); placement rule, "close to next level" label, "Hatalarınla çalış" link, under-18 note (**staging**) |
-| `/panel` | 5402 | New "Seviye testim" section after `[bai_panel]` (**staging**) |
-| `/kvkk-aydinlatma-metni` | 2345 | v2.7: level test + "Seviye testim" (**staging**) |
-| `/cerez-politikasi` | 4066 | v1.2: the two browser-storage keys (**staging**) |
+| `/seviye-testi-40` | 4011 | Milestones + badge; placement rule, "close to next level" label, "Hatalarınla çalış" link, under-18 note |
+| `/panel` | 5402 | New "Seviye testim" section after `[bai_panel]` |
+| `/kvkk-aydinlatma-metni` | 2345 | v2.7: level test + "Seviye testim" |
+| `/cerez-politikasi` | 4066 | v1.2: the two browser-storage keys |
 | `/seviye-testi` | 1688 | Unchanged (Elementor) |
 
 ## Publishing
@@ -30,10 +33,11 @@ Before going live, set `EFFECTIVE` in `legal_patches.py` to the publish date (it
   in the link `/panel/?lt=<code>#seviye-testim`. Code = `1` + yyyymmdd + one character per question (`0`–`4`, `x`).
   Login and registration keep `redirect_to`, so the code survives sign-up and works on another device.
 - **"Seviye testim"** (`panel/bai-ltp.js`, `.css`, built by `panel/build_panel.py`): logged out → badge + register / log-in
-  buttons; logged in → badge, score, priority topics (mistakes at or below the student’s level + 1), the rest folded
+  buttons; logged in with a result → badge, score, priority topics (mistakes at or below the student’s level + 1), the rest folded
   under "İleride". Each topic: 3-question quick check (3/3 → "biliyorsun"), TR/EN explanation, pattern, examples,
   5–6 practice questions with feedback (≥60% → done). Progress lives in `bai_lt_prog_v1`, and the result expires after 12 months.
   "Sonucu bu tarayıcıdan sil" deletes both keys. Nothing is sent to the server.
+  With no result in the browser the section stays hidden, also when logged in (teachers and coordinators use /panel too).
 - **Cards:** `cards.py`, 35 topics / 281 questions covering all 40 test items. Practice items never reuse a test sentence.
 
 ### Things to know
@@ -51,6 +55,7 @@ Before going live, set `EFFECTIVE` in `legal_patches.py` to the publish date (it
 |---|---|
 | `python3 tools/validate_cards.py` | card structure, coverage of all 40 items, no reused test sentence, script-safe text |
 | `node tools/test_place.js` | JS placement rule = reference rule on all 200,704 score patterns |
+| `node tools/test_desktop.js` | 1280px layout, keyboard-only use (Tab/Enter), focus moves to the topic title |
 | `node tools/test_panel.js` | "Seviye testim" locally: logged out/in, priorities, quick check, practice, progress, expiry, delete, 390px |
 | `TARGET_URL=$WP_STAGING_URL node tools/e2e_flow.js` | full flow on staging: test → result → link → register form → panel; section really visible |
 | `TARGET_URL=$WP_STAGING_URL node tools/e2e_staging.js` | milestone texts and badge on the result screen |

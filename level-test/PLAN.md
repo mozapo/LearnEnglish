@@ -1,6 +1,6 @@
 # Level test: plans (17 Oct 2026)
 
-> **Status 17 Oct 2026:** §1 step 1 (placement rule) and §2 phases 0–2 are built and on **staging**, waiting for approval.
+> **Status 17 Oct 2026:** §1 step 1 (placement rule) and §2 phases 0–2 are **live since 17 Oct 2026**.
 > The account part was built without new server code (see README, "Hand-over without server code"). Saving attempts
 > on the server (§1 step 2, the teacher view, cross-device sync) still needs server-side code; see the session report.
 

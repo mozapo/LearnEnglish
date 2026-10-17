@@ -383,7 +383,9 @@
 
   /* ---------------------------------------------------------------- start */
   if(!att){
-    if(loggedIn) viewEmpty(); else root.hidden = true;
+    /* No result in this browser: show nothing. Teachers and coordinators use /panel too, so an empty
+       "take the test" card would be noise for them; students arrive through their result link. */
+    root.hidden = true;
     return;
   }
   var sc = scoreOf(att);
