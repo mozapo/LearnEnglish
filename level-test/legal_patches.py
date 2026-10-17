@@ -63,3 +63,17 @@ CEREZ = [
         "Sürüm 1.2 — Son güncelleme: " + EFFECTIVE + " (seviye testi sonucu ve çalışma ilerlemesi için yerel depolama eklendi) · Önceki sürüm: 1.1 — 25 Eylül 2026 (şirket kimlik bilgileri eklendi) · İlk yürürlük: 10 Eylül 2026",
     ),
 ]
+
+# v2.8: anonymous answer statistics for improving the test
+EFFECTIVE_28 = "17 Ekim 2026"
+KVKK_V28 = [
+    (
+        "alandaki “Sonucu bu tarayıcıdan sil” bağlantısıyla dilediğiniz an silebilirsiniz.</li>",
+        "alandaki “Sonucu bu tarayıcıdan sil” bağlantısıyla dilediğiniz an silebilirsiniz.</li>\n"
+        "<li>Seviye testinin sorularını ve seviye sınırlarını geliştirmek için test yanıtlarının, test süresinin ve tarihinin ad, e-posta, telefon, IP adresi veya hesap bilgisi olmadan saklanması. Bu kayıtlar hiçbir kişiyle ilişkilendirilemez (anonim veridir); kötüye kullanımı önlemek için IP adresiniz yalnızca bir saatlik bir sayaçta, geri döndürülemez biçimde karma (hash) olarak kullanılır ve kayda eklenmez.</li>",
+    ),
+    (
+        "Sürüm 2.7 — Yürürlük tarihi: " + EFFECTIVE + " (değişiklik: seviye testi ve hesaptaki “Seviye testim” alanı eklendi) · Önceki sürümler: 2.6",
+        "Sürüm 2.8 — Yürürlük tarihi: " + EFFECTIVE_28 + " (değişiklik: seviye testinin geliştirilmesi için anonim yanıt istatistiği eklendi) · Önceki sürümler: 2.7 — " + EFFECTIVE + " (seviye testi ve hesaptaki “Seviye testim” alanı eklendi), 2.6",
+    ),
+]

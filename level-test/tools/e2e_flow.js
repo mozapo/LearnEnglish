@@ -25,6 +25,8 @@ const check = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) fail
   const errs = [];
   pg.on('pageerror', e => errs.push(pg.url() + ' :: ' + e.message));
   let posted = null;
+  let stat = null;
+  await pg.route('**/wp-json/bai/v1/lt-stat', r => { stat = JSON.parse(r.request().postData()); r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
   await pg.route('**/wp-json/bai/v1/level-test', r => { posted = JSON.parse(r.request().postData()); r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
 
   await gotoReal(pg, URL0 + '/seviye-testi-40/');
@@ -45,6 +47,7 @@ const check = (c, m) => { console.log((c ? 'ok   ' : 'FAIL ') + m); if (!c) fail
   check((await pg.textContent('#bai-lq-lvl')) === 'B1', 'placed B1 (21/40, A1-B1 mastered)');
   check(await pg.isHidden('#bai-lq-near'), 'no "çok yakın" line at 21 (B2 needs 28)');
   check(posted ? posted.result.placed === 'B1' : false, 'email payload carries the new level');
+  check(stat ? (/^1\d{8}[0-4x]{40}$/.test(stat.code) ? !JSON.stringify(stat).includes('example.com') : false) : false, 'anonymous statistic sent: answer code only, no name or e-mail');
   const link = await pg.getAttribute('#bai-lq-save-link', 'href');
   check(/^\/panel\/\?lt=1\d{8}[0-4x]{40}#seviye-testim$/.test(link), 'practice link carries the attempt code: ' + link.slice(0, 30) + '…');
   check(await pg.evaluate(() => !!localStorage.getItem('bai_lt_v1')), 'attempt saved in this browser');

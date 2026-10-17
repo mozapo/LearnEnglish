@@ -5,6 +5,7 @@ const { chromium } = require('playwright');
   const ctx = await b.newContext({ viewport: { width: 390, height: 900 } }); await ctx.addCookies([]); const pg = await ctx.newPage();
   const errs = []; pg.on('pageerror', e => errs.push(e.message));
   let posted = 0;
+  await pg.route('**/wp-json/bai/v1/lt-stat', r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
   await pg.route('**/wp-json/bai/v1/level-test', r => { posted++; r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
   await pg.goto((process.env.TARGET_URL || process.env.WP_STAGING_URL) + '/seviye-testi-40/?nocache=' + Date.now(), { waitUntil: 'load' });
   await pg.fill('#bai-lq-name', 'Test Öğrenci'); await pg.fill('#bai-lq-email', 'noreply@example.com');

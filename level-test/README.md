@@ -62,3 +62,17 @@ Before going live, set `EFFECTIVE` in `legal_patches.py` to the publish date (it
 | `python3 tools/placement_sim.py`, `tools/placement_sensitivity.py` | placement simulations (PLAN.md §1) |
 
 The level-test email request is intercepted in every browser test, so no email is sent.
+
+## Step 1 of the server work: anonymous answer statistics (in progress, 17 Oct 2026)
+
+- `server/lt-stats.php`: WPCode snippet that adds `POST /wp-json/bai/v1/lt-stat` (public, rate limited: 20 per
+  visitor per hour, 2000 per day) and `GET /wp-json/bai/v1/lt-stats` (administrators only). It stores answer code,
+  duration and early-finish flag; no name, e-mail, phone, IP or account. Tested with `php tools/test_lt_stats.php`.
+- Installed into snippet **4012 on staging** with `python3 server/install.py staging` (the old, inactive level-test
+  backend that lived there is in `backup/wpcode-4012-old-level-test-backend.php`). Status: active, but **not running
+  yet**: WPCode runs snippets from a cache that is rebuilt only when a snippet is saved in WPCode's own editor.
+  One click on **Update** for snippet 4012 in WP Admin → Code Snippets (staging) starts it.
+- Prepared, **not published**: `patches.FIXES_V3` (the test sends the anonymous statistic, plus a one-line note on the
+  form) and `legal_patches.KVKK_V28` (KVKK 2.8). `publish.py` already knows both states.
+  `staging/4011-…` and `staging/2345-…` hold these prepared builds, so they are ahead of what is on staging.
+- Turn it off at any time: `python3 server/install.py staging --deactivate`.

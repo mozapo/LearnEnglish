@@ -123,3 +123,20 @@ def apply(content, patch):
     if "&&" in content:
         raise SystemExit("'&&' in content: wpautop/kses would break the inline script")
     return content
+
+# Anonymous answer statistics (server/lt-stats.php, WPCode snippet 4012). Fire-and-forget: a failed or blocked
+# request never affects the student. No name, e-mail or account is sent, only the answer code and timing.
+STATS = [
+    (
+        "function saveAttempt(){",
+        'function sendStat(r, early){ try{ fetch("/wp-json/bai/v1/lt-stat", { method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({ code: attemptCode(), d: r.durationSeconds, e: early ? 1 : 0 }), keepalive: true })["catch"](function(){}); }catch(e){} } '
+        "function saveAttempt(){",
+    ),
+    ("paint(r); saveAttempt();", "paint(r); saveAttempt(); sendStat(r, early);"),
+    (
+        "sonuç o adrese gönderilir.</p>",
+        "sonuç o adrese gönderilir. Testi geliştirmek için yanıtların adın ve e-postan olmadan, anonim olarak saklanır.</p>",
+    ),
+]
+
+FIXES_V3 = STATS

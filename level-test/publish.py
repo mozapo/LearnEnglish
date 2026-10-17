@@ -27,9 +27,9 @@ import build_panel  # noqa: E402
 
 DAY = "2026-10-17"
 PAGES = {
-    4011: ("seviye-testi-40", "/seviye-testi-40/", "bai-lq-save-link"),
+    4011: ("seviye-testi-40", "/seviye-testi-40/", "bai/v1/lt-stat"),
     5402: ("panel", "/panel/", "bai-ltp-js"),
-    2345: ("kvkk-aydinlatma-metni", "/kvkk-aydinlatma-metni/", "Sürüm 2.7"),
+    2345: ("kvkk-aydinlatma-metni", "/kvkk-aydinlatma-metni/", "Sürüm 2.8"),
     4066: ("cerez-politikasi", "/cerez-politikasi/", "bai_lt_prog_v1"),
 }
 
@@ -61,11 +61,13 @@ def states(target, pid):
     base = open(backup_name(target, pid), encoding="utf-8").read()
     if pid == 4011:
         v1 = patches.apply(base, patches.FIXES_V1)
-        return base, [v1], patches.apply(v1, patches.FIXES_V2)
+        v2 = patches.apply(v1, patches.FIXES_V2)
+        return base, [v1, v2], patches.apply(v2, patches.FIXES_V3)
     if pid == 5402:
         return base, [], build_panel.merge(base, build_panel.build_block())
     if pid == 2345:
-        return base, [], patches.apply(base, legal_patches.KVKK)
+        v27 = patches.apply(base, legal_patches.KVKK)
+        return base, [v27], patches.apply(v27, legal_patches.KVKK_V28)
     return base, [], patches.apply(base, legal_patches.CEREZ)
 
 
