@@ -63,7 +63,7 @@ Before going live, set `EFFECTIVE` in `legal_patches.py` to the publish date (it
 
 The level-test email request is intercepted in every browser test, so no email is sent.
 
-## Step 1 of the server work: anonymous answer statistics (17 Oct 2026)
+## Step 1 of the server work: anonymous answer statistics (live since 17 Oct 2026)
 
 - `server/lt-stats.php`: WPCode snippet adding `POST /wp-json/bai/v1/lt-stat` (public, rate limited: 20 per visitor per
   hour, 2000 per day) and `GET /wp-json/bai/v1/lt-stats` (administrators only). Stores answer code, duration and
@@ -74,6 +74,8 @@ The level-test email request is intercepted in every browser test, so no email i
   WP Admin → Code Snippets and click **Update** once, otherwise the old cached version keeps running (or nothing).
 - **Staging:** running since 17 Oct 18:27 (owner clicked Update). Test page sends the statistic (`patches.FIXES_V3`),
   KVKK 2.8 published. Verified with `tools/e2e_stats_real.js` (record arrived, no personal data), `e2e_flow.js`, `e2e_staging.js`.
-- **Live:** code installed 18:30, waiting for the Update click; then `python3 publish.py live --yes --only 4011` and `--only 2345`.
+- **Live:** running since 17 Oct 18:39 (owner clicked Update); test page and KVKK 2.8 published 18:40. Verified with one
+  real test (record arrived, no personal data), then that test record (ID 5784) was deleted, so live data starts at zero.
+  Regression on live: `e2e_flow.js`, `e2e_staging.js` pass; they intercept the statistic, so tests add no records.
 - Turn it off: `python3 server/install.py staging|live --deactivate` (then Update in WPCode).
 - Read the data: `curl -u "$WP_USER:$WP_APP_PASSWORD" $WP_URL/wp-json/bai/v1/lt-stats`.
