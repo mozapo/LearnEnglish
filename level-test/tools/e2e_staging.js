@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
   let posted = 0;
   await pg.route('**/wp-json/bai/v1/lt-stat', r => r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }));
   await pg.route('**/wp-json/bai/v1/level-test', r => { posted++; r.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
-  await pg.goto((process.env.TARGET_URL || process.env.WP_STAGING_URL) + '/seviye-testi-40/?nocache=' + Date.now(), { waitUntil: 'load' });
+  for (let i = 0; i < 8; i++) { const resp = await pg.goto((process.env.TARGET_URL || process.env.WP_STAGING_URL) + '/seviye-testi-40/?nocache=' + Date.now() + i, { waitUntil: 'load' }); if (resp.status() === 200) break; await pg.waitForTimeout(4000); }
   await pg.fill('#bai-lq-name', 'Test Öğrenci'); await pg.fill('#bai-lq-email', 'noreply@example.com');
   const cb = await pg.$('#bai-lq-form input[type=checkbox]'); if (cb) await cb.check();
   await pg.click('#bai-lq-form button[type=submit]'); await pg.waitForSelector('#bai-lq-quiz.is-on');

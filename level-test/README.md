@@ -63,16 +63,17 @@ Before going live, set `EFFECTIVE` in `legal_patches.py` to the publish date (it
 
 The level-test email request is intercepted in every browser test, so no email is sent.
 
-## Step 1 of the server work: anonymous answer statistics (in progress, 17 Oct 2026)
+## Step 1 of the server work: anonymous answer statistics (17 Oct 2026)
 
-- `server/lt-stats.php`: WPCode snippet that adds `POST /wp-json/bai/v1/lt-stat` (public, rate limited: 20 per
-  visitor per hour, 2000 per day) and `GET /wp-json/bai/v1/lt-stats` (administrators only). It stores answer code,
-  duration and early-finish flag; no name, e-mail, phone, IP or account. Tested with `php tools/test_lt_stats.php`.
-- Installed into snippet **4012 on staging** with `python3 server/install.py staging` (the old, inactive level-test
-  backend that lived there is in `backup/wpcode-4012-old-level-test-backend.php`). Status: active, but **not running
-  yet**: WPCode runs snippets from a cache that is rebuilt only when a snippet is saved in WPCode's own editor.
-  One click on **Update** for snippet 4012 in WP Admin → Code Snippets (staging) starts it.
-- Prepared, **not published**: `patches.FIXES_V3` (the test sends the anonymous statistic, plus a one-line note on the
-  form) and `legal_patches.KVKK_V28` (KVKK 2.8). `publish.py` already knows both states.
-  `staging/4011-…` and `staging/2345-…` hold these prepared builds, so they are ahead of what is on staging.
-- Turn it off at any time: `python3 server/install.py staging --deactivate`.
+- `server/lt-stats.php`: WPCode snippet adding `POST /wp-json/bai/v1/lt-stat` (public, rate limited: 20 per visitor per
+  hour, 2000 per day) and `GET /wp-json/bai/v1/lt-stats` (administrators only). Stores answer code, duration and
+  early-finish flag; no name, e-mail, phone, IP or account. Unit test: `php tools/test_lt_stats.php`.
+- Installed into snippet **4012** with `python3 server/install.py staging|live` (the old, inactive level-test backend
+  that lived there is in `backup/wpcode-4012-old-level-test-backend.php`).
+- **WPCode only runs code saved from its own editor.** After every install through the API, open snippet 4012 in
+  WP Admin → Code Snippets and click **Update** once, otherwise the old cached version keeps running (or nothing).
+- **Staging:** running since 17 Oct 18:27 (owner clicked Update). Test page sends the statistic (`patches.FIXES_V3`),
+  KVKK 2.8 published. Verified with `tools/e2e_stats_real.js` (record arrived, no personal data), `e2e_flow.js`, `e2e_staging.js`.
+- **Live:** code installed 18:30, waiting for the Update click; then `python3 publish.py live --yes --only 4011` and `--only 2345`.
+- Turn it off: `python3 server/install.py staging|live --deactivate` (then Update in WPCode).
+- Read the data: `curl -u "$WP_USER:$WP_APP_PASSWORD" $WP_URL/wp-json/bai/v1/lt-stats`.
