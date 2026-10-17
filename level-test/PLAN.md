@@ -1,5 +1,9 @@
 # Level test: plans (17 Oct 2026)
 
+> **Status 17 Oct 2026:** §1 step 1 (placement rule) and §2 phases 0–2 are built and on **staging**, waiting for approval.
+> The account part was built without new server code (see README, "Hand-over without server code"). Saving attempts
+> on the server (§1 step 2, the teacher view, cross-device sync) still needs server-side code; see the session report.
+
 ## 1. Placement rule (issue 2)
 
 **Problem.** Today a learner is placed at the highest level where they score ≥60% on that level *and* ≥60% overall
@@ -29,7 +33,9 @@ at a high level can lift the result.
 
 **Plan**
 1. **Now (staging, no data needed):** place by total score with provisional cut points
-   from the model (A1 0–16 · A2 17–22 · B1 23–27 · B2 28–32 · C1 33–35 · C2 36–40, assuming low guessing thanks
+   from the model, plus a floor at the highest level mastered with every level below it (checked across six item models in
+   `tools/placement_sensitivity.py`: costs at most 3 points of accuracy, and a learner who aces A1–A2 and honestly answers
+   "I don't know" afterwards is placed A2, not A1) (A1 0–16 · A2 17–22 · B1 23–27 · B2 28–32 · C1 33–35 · C2 36–40, assuming low guessing thanks
    to "I don't know"; with more guessing each cut rises by about one point). Keep the level bars as a *profile*, not the
    decision. Show "sınırda" (e.g. "B1, B2'ye yakın") when the score is within one point of a cut. Keep the
    confidence rating.
