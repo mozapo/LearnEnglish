@@ -58,7 +58,8 @@ def content(target, group, rollback):
                     print(f"{pid} {field}: not in the patched state, left alone")
                     continue
             else:
-                if all(cur.count(old) == 0 and (not new or cur.count(new) >= 1) for _, old, new, _ in ps):
+                # Patched: each new text is present and the old text no longer appears outside it.
+                if all((not new or new in cur) and old not in (cur.replace(new, "") if new else cur) for _, old, new, _ in ps):
                     print(f"{pid} {field}: already patched")
                     continue
                 done = build(cur, ps)

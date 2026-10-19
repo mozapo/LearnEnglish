@@ -112,16 +112,22 @@ the Elementor and LiteSpeed caches.
 `python3 seo/publish.py live restore --only <id> --yes` restores the 19 Oct backup. (Restore was tested on
 staging: page 5518 restored, verified, re-patched.)
 
-## 5. Business and legal wording: your decision (not changed)
+## 5. Business and legal wording (owner decisions of 19 Oct 2026, group D, live)
 
-| Page | Text | Why it matters | Suggestion |
-|---|---|---|---|
-| /programlar | "UCAS Registered Centres ve Common App kabul odaklı … paket" | Reads as an official UCAS affiliation | Remove unless the company is a registered UCAS centre. "UCAS ve Common App başvurularına yönelik …" is factual |
-| /programlar vs /yurt-disi-egitim | Package lists "Konsolosluk vize si(…)" support; FAQ says "Vize desteğinin hizmet kapsamında olup olmadığı ayrıca doğrulanmalıdır" | Contradiction, and the FAQ reads unfinished | Decide whether visa paperwork support is in scope, then align both |
-| /hakkimizda, /en/about | "British Council IELTS, ETS TOEFL ve UCAS gibi … standartlarla ilerliyoruz" | Can be read as a partnership | e.g. "IELTS, TOEFL ve UCAS'ın resmî ölçüt ve kılavuzlarını esas alıyoruz" |
-| /hakkimizda, /en/about, /misyon-vizyon, /programlar, /en/ | "zihinsel esenlik / zihinsel denge / mental wellbeing" | Sits close to the "not a health service" line | Use "öğrenme ve motivasyon desteği" |
-| /kvkk-basvuru-formu (legal) | "resmî başvuru adresleri, kurumsal kayıt işlemleri tamamlandığında bu tabloya eklenecektir" | Company is registered; legal text still says pending | Add the registered address (and KEP if you have one); legal review |
-| /yaratici-atolyeler/nefes-zindelik-atolyesi | "lisanslı/sertifikalı olması şartıyla seçilen bir eğitmen … adı duyuru ile paylaşılır" | Bookable without a named instructor | Name the instructor or mark it as "next date to be announced" |
+| Decision | What changed (live, verified) |
+|---|---|
+| Remove the UCAS affiliation wording | /programlar: "UCAS Registered Centres ve Common App kabul odaklı" → "Ülke ve program seçiminden başvuru dosyasına bütünsel üniversite başvuru rehberliği paketi". /hakkimizda and /en/about: "British Council IELTS, ETS TOEFL ve UCAS gibi … standartlarla" → "Sınav kurumlarının ve üniversitelerin yayımladığı resmî ölçütleri ve güncel kaynakları esas alıyoruz" (EN: "official criteria and current guidance published by exam boards and universities") |
+| Visa applications are not a service; partners can be suggested; no responsibility for them | One wording everywhere: "Vize başvurusu hizmetlerimiz arasında değildir; istersen seni iş ortaklarımıza yönlendirebiliriz, ancak onların hizmetlerinden Bir Adım İleri sorumlu değildir." Changed on / (card + quiz), /sikca-sorulan-sorular, /hizmetler (chip "Vize provası", card "Burs ve vize stratejisi"), /programlar ("Konsolosluk vize simülasyonu"), /yurt-disi-egitim and /universite-basvuru-danismanligi-2 FAQ (visible + schema), /fransa-egitim, /irlanda-egitim, /hollanda-egitim, /italya-egitim (2 cards + 2 schema descriptions), /en/, /en/study-abroad FAQ. Informational sentences about what the student must prepare for a visa were left as they are |
+| "zihinsel esenlik / mental wellbeing" → "öğrenme ve motivasyon desteği" | /programlar (3 places), /hakkimizda, /misyon-vizyon (text + FAQ schema), /kaynaklar, /en/about, /en/test-prep, /en/english-courses. /hizmetler and /en/services already said this in their Elementor version. The founder's expertise list on /en/about ("Student Wellbeing", "Wellbeing Coaching") describes past experience and was left as is |
+| KVKK form: the address is known | The table already had the Kartal address and the KEP address; the note "kurumsal kayıt işlemleri tamamlandığında eklenecektir" was replaced by "Başvurunuzu yukarıdaki kanallardan biriyle iletebilirsiniz…". Version 1.3, 19 Oct 2026 |
+
+**Waiting for your OK (group E, on staging only):** a paragraph in /kullanim-kosullari section 8 saying visa
+applications are not a service, that referrals go to independent partners who act under their own responsibility,
+and that Bir Adım İleri is not responsible for their services, fees or the visa outcome, "without limiting liability
+arising from law or your consumer rights" (a blanket exclusion would not hold under consumer law). Version 1.3.
+Publish with `python3 seo/publish.py live content E --yes`.
+
+Still open from the audit: the Nefes & Zindelik workshop page books without a named instructor.
 
 ## 6. Performance (measured, lab data)
 
@@ -167,16 +173,16 @@ fix (needs theme file access, which the API does not give):
 No performance change was deployed, so there are no "after" scores yet. Measure again with
 `seo/lighthouse.sh` after the theme work.
 
-## 7. Blocked: needs your access
+## 7. Access-dependent items and their status
 
 | Item | What to do |
 |---|---|
 | **Google Search Console** (rankings, impressions, indexing, real CWV) | WP Admin → SureRank → Search Console → connect with the Google account that owns the domain. Then submit `https://biradimileri.com/sitemap_index.xml`. Bing Webmaster Tools can import from Search Console |
 | GA4/GTM audit (lead and purchase events, consent) | Read access to GTM container GTM-T5FDGPQM and the GA4 property |
 | Full backup before live | Hostinger hPanel → Backups |
-| Child-theme performance work | SFTP/File Manager access, or a developer, for `wp-content/themes/bai-astra-child` |
-| /is-ingilizcesi/ 302 → home | Should be a 301 to /is-ingilizcesi-2/. The rule is not in WordPress content; check hPanel redirects or `.htaccess` |
-| http://www → https://www → apex (2 hops) | Minor; one hop is possible in Hostinger CDN/redirect settings |
+| Child-theme performance work | `bai-motion.js` is a theme file (SFTP/File Manager or a developer). The inline contrast guard turned out to live in menu item 2096 ("Giriş Yap", Mobil Menü) and can be edited over the API, but a time-sliced version was **not** deployed: tested on 12 pages, it cut blocking time 20–45% but left different final colours on /ucretler and /en/ (sweeps triggered before page load got delayed). The reliable fix is moving the colour corrections into `bai-components.css`. Harness: `seo/perf/guard_equivalence.js`, backups of menu items 2096/2374 in `seo/menu/` |
+| /is-ingilizcesi/ 302 → home | **Fixed 19 Oct.** Cause: an image (media 2842) used the slug and had no parent, so SureRank sent its attachment page to the home page. The image is now attached to page 1488; the URL now 301s to /product/is-ingilizcesi-10-saat/ (WordPress's closest match). An exact 301 to /is-ingilizcesi-2/ would need a WPCode snippet that you activate |
+| http://www → https://www → apex (2 hops) | Happens at the Hostinger CDN before WordPress; not changeable over the API. Minor (only typed http://www URLs) |
 | Staging differences | Live /iptal-ve-iade is newer than staging, and /geri-bildirim is missing on staging. Neither was touched |
 
 ## 8. Search intent map (key URLs)

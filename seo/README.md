@@ -2,7 +2,7 @@
 
 Read `REPORT.md` first: what the audit claimed, what was verified, what changed, what waits for approval.
 
-**State on 19 Oct 2026:** metadata and content groups A, B and C are on staging and live, verified on both. The section-5 wording in REPORT.md is still open.
+**State on 19 Oct 2026:** metadata and content groups A–D are on staging and live, verified on both. Group E (terms-of-use clause on visa referrals) is on staging only and waits for the owner's OK.
 
 ```bash
 python3 seo/publish.py staging|live meta [--only ID ...] [--rollback] [--yes]   # SureRank titles/descriptions/robots
@@ -22,3 +22,5 @@ LH_BIN=.../lighthouse seo/lighthouse.sh OUTDIR URL...; python3 seo/lh_summary.py
 - Staging is noindexed site-wide on purpose, so compare robots against live, not staging.
 - Metadata wording rules: Turkish "sen" on marketing pages, "siz" on legal pages, "rehberlik" not "danışmanlık",
   no outcome promises, and every fact taken from the page itself.
+
+- Some site-wide inline scripts (contrast guard, mega menu, footer and FAQ styles) are stored in the **labels of menu items 2096 and 2374** (Mobil Menü). Edit them with `/wp/v2/menu-items/<id>` and keep the backups in `menu/`.
