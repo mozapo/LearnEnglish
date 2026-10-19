@@ -54,6 +54,8 @@ site itself through the WordPress REST API, not in local code.
   `level-test/` (read `level-test/README.md` first). The anonymous answer statistics run in WPCode snippet 4012; after any
   change to server code installed over the API, the owner must click **Update** on that snippet in WPCode, or the old
   cached code keeps running.
+- **SEO:** SureRank is the only SEO plugin (titles, descriptions, schema, sitemap). The Oct 2026 audit, its tools and
+  the approval status are in `seo/` (read `seo/REPORT.md` first).
 - **Front page:** `/home` (ID 923), with a 7-question "Yön Bulma" quiz that runs only in the browser. There is no posts page;
   the blog is the `/blog` page, with 1 published post so far.
 - **Footer menu ("Alt Menü (Dengeli)") is the real sitemap:**

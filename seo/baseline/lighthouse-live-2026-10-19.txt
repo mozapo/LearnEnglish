@@ -1,0 +1,21 @@
+page                                                       mode    n perf  LCP ms  TBT ms   CLS   FCP ms   KiB seo a11y
+blog                                                       desktop 3   98     642      99 0.003     442   726 100   96
+blog                                                       mobile  3   79    3025     506 0.001    1980   648 100  100
+burs-rehberi                                               desktop 3   93     702     204 0.003     499   673 100   96
+burs-rehberi                                               mobile  3   64    2926    2174 0.000    1989   645 100  100
+en                                                         desktop 3  100     648      24 0.002     442   718 100   96
+en                                                         mobile  3   85    3008     342 0.001    1830   664 100  100
+home                                                       desktop 3   97     727     122 0.003     507   662 100   96
+home                                                       mobile  3   75    2930     714 0.000    2074   672 100  100
+ielts-hazirlik-3                                           desktop 3   99     688      30 0.003     470   655 100   96
+ielts-hazirlik-3                                           mobile  3   85    2880     328 0.001    1980   663 100  100
+ingilizce-egitimi                                          desktop 3   99     701      57 0.003     441   726 100   96
+ingilizce-egitimi                                          mobile  3   84    2730     408 0.001    1875   651 100  100
+programlar_bireysel-programlar_sinav-programlari_ielts-haz desktop 3   98     662     114 0.003     441   663 100   96
+programlar_bireysel-programlar_sinav-programlari_ielts-haz mobile  3   77    2730     722 0.000    1980   631 100  100
+seviye-testi                                               desktop 3  100     701      16 0.003     481   810 100   96
+seviye-testi                                               mobile  3   74    5372     238 0.001    2021   725 100  100
+sinav-hazirligi                                            desktop 3   98     680     105 0.003     441   747 100   96
+sinav-hazirligi                                            mobile  3   67    2927    1005 0.000    2027   662 100  100
+ucretler                                                   desktop 3   94     730     193 0.003     458   619 100   96
+ucretler                                                   mobile  3   64    3239    1502 0.000    2064   628 100  100
