@@ -20,7 +20,8 @@ def main(target):
         out["surerank_post"][p["id"]] = r.json().get("data")
     out["products"] = s.get(B + "/wc/v3/products", params={"per_page": 100, "status": "any"}, timeout=60).json()
     os.makedirs(os.path.join(os.path.dirname(__file__), "backup"), exist_ok=True)
-    path = os.path.join(os.path.dirname(__file__), "backup", f"{target}-{datetime.date.today()}.json.gz")
+    suffix = os.environ.get("BACKUP_SUFFIX", "")
+    path = os.path.join(os.path.dirname(__file__), "backup", f"{target}-{datetime.date.today()}{suffix}.json.gz")
     with gzip.open(path, "wt", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False)
     print(path, len(out["pages"]), "pages", len(out["posts"]), "posts", len(out["products"]), "products",

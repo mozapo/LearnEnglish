@@ -2,7 +2,7 @@
 
 Read `REPORT.md` first: what the audit claimed, what was verified, what changed, what waits for approval.
 
-**State on 19 Oct 2026:** all fixes are on staging and verified. Live is unchanged until the owner approves each group.
+**State on 19 Oct 2026:** metadata and content groups A, B and C are on staging and live, verified on both. The section-5 wording in REPORT.md is still open.
 
 ```bash
 python3 seo/publish.py staging|live meta [--only ID ...] [--rollback] [--yes]   # SureRank titles/descriptions/robots

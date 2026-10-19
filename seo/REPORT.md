@@ -2,9 +2,13 @@
 
 biradimileri.com · 19 Oct 2026 · Starting point: the ChatGPT audit "biradimileri_SEO_audit_and_Claude_WordPress_brief_2026-10-19".
 
-**Status:** all fixes below are **on staging and verified**. **Nothing has been changed on live.** Live needs your
-approval for each group (section 4). Business and legal wording was not changed; it is listed in section 5 for
-your decision.
+**Status:** all fixes in sections 3–4 are **live since 19 Oct 2026** (owner approved "go live"), after staging.
+Live was verified with a full re-crawl: 209 URLs return 200, and exactly 12 titles, 76 descriptions and 1 robots tag
+changed (/randevu-olustur now noindex, out of the sitemap). H1s, canonicals, hreflang, schema and `lang` are
+identical to before. All 6 content edits are visible to logged-out visitors, the level test passes end to end, and
+the cart, login, panel and price pages respond as before. A snapshot taken right before publishing is in
+`seo/backup/live-2026-10-19-prepublish.json.gz`. **Not changed:** the business and legal wording in section 5,
+which still needs a specific decision.
 
 ## 1. Summary
 
@@ -90,7 +94,7 @@ values: `seo/metadata_changes.csv`.
   "learning support".
 - /randevu-olustur: noindex value corrected ("1" → "yes"); it drops out of the sitemap.
 
-## 4. Going live (needs your approval, group by group)
+## 4. Going live (done 19 Oct 2026; commands kept for reference and rollback)
 
 Before the first live step, please also take a full backup in Hostinger hPanel (Backups). My backup covers page
 content and SEO settings only (`seo/backup/live-2026-10-19.json.gz`), not the database and files.
